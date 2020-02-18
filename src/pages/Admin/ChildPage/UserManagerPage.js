@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {fetchAllUser, fetchSingleUser, OpenPopUpUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import {fetchAllUser, OpenPopUpUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import EditIcon from '@material-ui/icons/Edit';
 import DialogUserInfo from '../../../Components/Main/Dialog/DialogUserInfo'
@@ -30,7 +30,9 @@ const useStyles = makeStyles({
 const UserManagerPage = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [currentUser, setCurrentUser] = useState("");
     const dataResponse = useSelector(state => state.AllUsersReducer);
+    const isOpen = useSelector(state => state.TogglePopUpUserReducers);
     var rowPerPage = 10;
     var page = 0;
     const handleChangePage = (event, newPage) => {
@@ -51,8 +53,8 @@ const UserManagerPage = () => {
 
     const handleIconMoreClick = username =>{
         console.log(username);
+        setCurrentUser(username);
         dispatch(OpenPopUpUser());
-        dispatch(fetchSingleUser({username : username}));
     }
     useEffect(() => {
        dispatch(fetchAllUser({
@@ -61,15 +63,6 @@ const UserManagerPage = () => {
        }))
     }, [])
 
-    // const descriptionElementRef = React.useRef(null);
-    // useEffect(() => {
-    //     if (open) {
-    //       const { current: descriptionElement } = descriptionElementRef;
-    //       if (descriptionElement !== null) {
-    //         descriptionElement.focus();
-    //       }
-    //     }
-    //   }, [open]);
     console.log(dataResponse);
     return (
         <div className = {classes.container}>
@@ -92,14 +85,8 @@ const UserManagerPage = () => {
                         <TableCell component="th" scope="row">{row.id}</TableCell>
                         <TableCell align="center">{row.username}</TableCell>
                         <TableCell align="center">{row.password}</TableCell>
-                        <TableCell align="center">{row.roles}
-                        <IconButton>
-                            <EditIcon fontSize = "small"/>
-                        </IconButton></TableCell>
-                        <TableCell align="center">{row.status === 1 ? "ACTIVE" : "DISABLE"}
-                        <IconButton>
-                            <EditIcon fontSize = "small"/>
-                        </IconButton></TableCell>
+                        <TableCell align="center">{row.roles}</TableCell>
+                        <TableCell align="center">{row.status === 1 ? "ACTIVE" : "DISABLE"}</TableCell>
                         <TableCell align="center">
                             <IconButton onClick = {()=>handleIconMoreClick(row.username)}>
                             <MoreHorizIcon/>
@@ -120,7 +107,7 @@ const UserManagerPage = () => {
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
         </Paper>
-        <DialogUserInfo />
+        {isOpen?<DialogUserInfo username = {currentUser}/> : null}
     </div>
     );
 };

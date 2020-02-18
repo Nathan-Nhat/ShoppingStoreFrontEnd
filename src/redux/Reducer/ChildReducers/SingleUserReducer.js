@@ -1,5 +1,7 @@
 import {FETCH_SINGLE_USER_SUCCESS, FETCH_SINGLE_USER_FAIL} from '../../Actions/ActionConstant/ActionConstants'
-const initialState = {};
+const initialState = {
+    userDetails : {}
+};
 
 const SingleUserReducer = (state = initialState, action)=>{
     switch(action.type) {

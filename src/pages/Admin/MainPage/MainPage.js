@@ -15,7 +15,7 @@ function MainPage() {
                     <AppBarComponent/>
                     <SwitchRouter>
                         <Route exact path = "/" component = {MainManagerPage}/>
-                        <Route path = "/users" component = {UserManagerPage}/>
+                        <Route exact path = "/users" component = {UserManagerPage}/>
                     </SwitchRouter> 
                 </div>
             </div>

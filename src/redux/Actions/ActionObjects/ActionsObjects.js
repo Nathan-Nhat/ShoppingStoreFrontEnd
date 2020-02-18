@@ -1,4 +1,7 @@
-import {TOGGLE_OPEN, LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOGOUT_SUCCESS, FETCH_ALL_USER, FETCH_ALL_USER_SUCCESS, FETCH_ALL_USER_FAIL} from '../ActionConstant/ActionConstants'
+import {TOGGLE_OPEN, LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOGOUT_SUCCESS, 
+    FETCH_ALL_USER, FETCH_ALL_USER_SUCCESS, FETCH_ALL_USER_FAIL, 
+    FETCH_SINGLE_USER, FETCH_SINGLE_USER_SUCCESS, FETCH_SINGLE_USER_FAIL,
+    OPEN_POPUP_USER, CLOSE_POPUP_USER} from '../ActionConstant/ActionConstants'
 export const toggleOpen = ()=>({
     type : TOGGLE_OPEN
 })
@@ -37,4 +40,25 @@ export const fetchAllUserSuccess = data => ({
 export const fetchAllUserFail = data => ({
     type : FETCH_ALL_USER_FAIL,
     data
+})
+
+export const fetchSingleUser = data =>({
+    type : FETCH_SINGLE_USER,
+    data
+})
+
+export const fetchSingleUserSuccess = data =>({
+    type : FETCH_SINGLE_USER_SUCCESS,
+    data
+})
+
+export const fetchSingleUserFail = data =>({
+    type : FETCH_SINGLE_USER_FAIL,
+    data
+})
+export const OpenPopUpUser = () =>({
+    type : OPEN_POPUP_USER,
+})
+export const ClosePopUpUser = () =>({
+    type : CLOSE_POPUP_USER,
 })

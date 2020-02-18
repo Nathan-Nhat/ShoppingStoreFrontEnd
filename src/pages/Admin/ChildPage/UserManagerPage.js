@@ -6,15 +6,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {IconButton} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
-import {getData} from '../../../API/Api.js'
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import { fetchAllUserFail } from '../../../redux/Actions/ActionObjects/ActionsObjects.js';
-import {fetchAllUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
-import AllUsersReducer from '../../../redux/Reducer/ChildReducers/AllUsersReducer'
+import {fetchAllUser, fetchSingleUser, OpenPopUpUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import EditIcon from '@material-ui/icons/Edit';
+import DialogUserInfo from '../../../Components/Main/Dialog/DialogUserInfo'
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -31,7 +31,6 @@ const UserManagerPage = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const dataResponse = useSelector(state => state.AllUsersReducer);
-
     var rowPerPage = 10;
     var page = 0;
     const handleChangePage = (event, newPage) => {
@@ -49,12 +48,28 @@ const UserManagerPage = () => {
             size:rowPerPage
         }))
       };
+
+    const handleIconMoreClick = username =>{
+        console.log(username);
+        dispatch(OpenPopUpUser());
+        dispatch(fetchSingleUser({username : username}));
+    }
     useEffect(() => {
        dispatch(fetchAllUser({
            page:page,
            size:rowPerPage
        }))
     }, [])
+
+    // const descriptionElementRef = React.useRef(null);
+    // useEffect(() => {
+    //     if (open) {
+    //       const { current: descriptionElement } = descriptionElementRef;
+    //       if (descriptionElement !== null) {
+    //         descriptionElement.focus();
+    //       }
+    //     }
+    //   }, [open]);
     console.log(dataResponse);
     return (
         <div className = {classes.container}>
@@ -65,9 +80,10 @@ const UserManagerPage = () => {
                 <TableRow>
                     <TableCell>ID</TableCell>
                     <TableCell align="center" color>Username</TableCell>
-                    <TableCell align="center">Password</TableCell>
+                    <TableCell align="center">Phone number</TableCell>
                     <TableCell align="center">Roles</TableCell>
                     <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">More Info</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
@@ -76,8 +92,19 @@ const UserManagerPage = () => {
                         <TableCell component="th" scope="row">{row.id}</TableCell>
                         <TableCell align="center">{row.username}</TableCell>
                         <TableCell align="center">{row.password}</TableCell>
-                        <TableCell align="center">{row.roles}</TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align="center">{row.roles}
+                        <IconButton>
+                            <EditIcon fontSize = "small"/>
+                        </IconButton></TableCell>
+                        <TableCell align="center">{row.status === 1 ? "ACTIVE" : "DISABLE"}
+                        <IconButton>
+                            <EditIcon fontSize = "small"/>
+                        </IconButton></TableCell>
+                        <TableCell align="center">
+                            <IconButton onClick = {()=>handleIconMoreClick(row.username)}>
+                            <MoreHorizIcon/>
+                            </IconButton>
+                            </TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
@@ -93,6 +120,7 @@ const UserManagerPage = () => {
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
         </Paper>
+        <DialogUserInfo />
     </div>
     );
 };

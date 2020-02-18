@@ -10,8 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import {getData} from '../../../API/Api.js'
-import {useEffect} from 'react'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import { fetchAllUserFail } from '../../../redux/Actions/ActionObjects/ActionsObjects.js';
+import {fetchAllUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import AllUsersReducer from '../../../redux/Reducer/ChildReducers/AllUsersReducer'
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -26,47 +29,38 @@ const useStyles = makeStyles({
 
 const UserManagerPage = () => {
     const classes = useStyles();
-    const [state, setState] = useState([]);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowPerPage] = useState(10);
-    const [total, setTotal] = useState(0);
-    const setTablePage = response => {
-        setState(response.data.content);
-        setPage(response.data.number);
-        setRowPerPage(response.data.size);
-        setTotal(response.data.totalElements);
-    }
+    const dispatch = useDispatch();
+    const dataResponse = useSelector(state => state.AllUsersReducer);
 
+    var rowPerPage = 10;
+    var page = 0;
     const handleChangePage = (event, newPage) => {
-        console.log(event);
-        console.log(newPage);
-        getData(`/api/admin/all-users?page=${newPage}&size=${rowsPerPage}`,
-        response => {setTablePage(response);
-        console.log(response)},
-        error => console.log(error),
-        true);
+        page = newPage;
+        dispatch(fetchAllUser({
+            page:page,
+            size:rowPerPage
+        }))
     }
 
     const handleChangeRowsPerPage = event => {
-        console.log(event.target.value);
-        getData(`/api/admin/all-users?page=0&size=${event.target.value}`,
-        response => {setTablePage(response);
-        console.log(response)},
-        error => console.log(error),
-        true);
+        rowPerPage = event.target.value;
+        dispatch(fetchAllUser({
+            page:page,
+            size:rowPerPage
+        }))
       };
     useEffect(() => {
-        getData(`/api/admin/all-users?page=${page}&size=${rowsPerPage}`,
-        response => setTablePage(response), 
-        error => console.log(error), 
-        true)
+       dispatch(fetchAllUser({
+           page:page,
+           size:rowPerPage
+       }))
     }, [])
-
+    console.log(dataResponse);
     return (
         <div className = {classes.container}>
         <Paper>
         <TableContainer className = {classes.tableContainer}>
-             <Table className={classes.table} aria-label="simple table">
+             <Table stickyHeader className={classes.table} aria-label="simple table">
                 <TableHead>
                 <TableRow>
                     <TableCell>ID</TableCell>
@@ -77,7 +71,7 @@ const UserManagerPage = () => {
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                {state.map(row => (
+                {dataResponse.content.map(row => (
                     <TableRow key={row.id}>
                         <TableCell component="th" scope="row">{row.id}</TableCell>
                         <TableCell align="center">{row.username}</TableCell>
@@ -92,9 +86,9 @@ const UserManagerPage = () => {
         <TablePagination
                             rowsPerPageOptions={[10, 25, 100]}
                             component="div"
-                            count={total}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
+                            count={dataResponse.totalElements}
+                            rowsPerPage={dataResponse.size}
+                            page={dataResponse.number}
                             onChangePage={handleChangePage}
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />

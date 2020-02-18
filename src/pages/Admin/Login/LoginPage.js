@@ -47,6 +47,7 @@ function LoginPage(){
                 <Typography align = "center" variant = "h2" className = {classes.title} color = "textSecondary"> Login</Typography>
                 <Divider variant = "middle"/>
                 {isAuthenticated === 0? <Typography align = "center" variant = "h6" color = "textSecondary">Invalid Username/Password</Typography> : null}
+                {isAuthenticated === 2? <Typography align = "center" variant = "h6" color = "textSecondary">Logout Success</Typography> : null}
                 <form className = {classes.loginForm}>
                     <TextField required id = "username" label = "Username" className = {classes.element} onChange = {handleChange} name = "username"/>
                     <TextField required id = "password" label = "Password" className = {classes.element} onChange = {handleChange} name = "password"/>

@@ -3,9 +3,6 @@ import DrawerComponent from '../../../Components/Main/Drawer/Drawer.component';
 import AppBarComponent from '../../../Components/Main/AppBar/AppBar.Component'
 import useMainPageStyles from './MainPageStyle'
 import theme from '../../../Themes/DrawerThemes'
-import { Typography} from '@material-ui/core';
-import clsx from 'clsx';
-import {useSelector, useDispatch} from 'react-redux'
 import {Switch as SwitchRouter, Route} from 'react-router-dom'
 import UserManagerPage from '../ChildPage/UserManagerPage'
 import MainManagerPage from '../ChildPage/MainManagerPage'

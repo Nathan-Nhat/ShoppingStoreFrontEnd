@@ -19,7 +19,7 @@ export async function postData(url = '', data = {}, isJwtValid) {
     );
   }
 
-  export async function getData(url = '', onSucess, onError, isJwtValid) {
+  export async function getData(url = '', isJwtValid) {
     let config = null;
     const jwtToken = await getJwt();
     const AuthStr = "Bearer ".concat(jwtToken);
@@ -28,13 +28,12 @@ export async function postData(url = '', data = {}, isJwtValid) {
         config = {headers : { Authorization: AuthStr,}}
     }
     const newUrl = baseUrl + url;
-    Axios.get(newUrl, config)
-    .then((response) => {
-        onSucess(response);
-    },
-    (error) => {
-        onError(error);
-    })
-    .catch( err => {console.log("33333333333" + err);}
+    return Axios.get(newUrl, config)
+    .then(
+        response=>response,
+        err => {throw err;}
     )
+    .catch(
+        error => error
+    );
   }

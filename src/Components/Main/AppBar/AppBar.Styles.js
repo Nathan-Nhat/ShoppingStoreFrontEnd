@@ -1,4 +1,6 @@
-const AppBarStyles = (theme) => {
+import { makeStyles } from "@material-ui/core";
+
+const useAppBarStyle = makeStyles((theme) => {
     return ({
           menuButton: {
             marginRight: 36,
@@ -17,6 +19,6 @@ const AppBarStyles = (theme) => {
           flexGrow: 1,
         }
           })    
-};
+});
 
-export default AppBarStyles;
+export default useAppBarStyle;

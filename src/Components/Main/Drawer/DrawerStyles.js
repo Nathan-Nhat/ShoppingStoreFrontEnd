@@ -1,6 +1,6 @@
+import { makeStyles } from "@material-ui/core"; 
 const drawerWidth = 240;
-const DrawerStyles = (theme) => {
-    return ({
+const useDrawerStyles = makeStyles((theme) => ({
         drawer: {
             flexShrink: 0,
             whiteSpace: 'nowrap',
@@ -8,7 +8,7 @@ const DrawerStyles = (theme) => {
             backgroundColor: theme.colorMain.drawer,
         },
         drawerOpen: {
-            width: "14%",
+            width: drawerWidth,
             transition: theme.transitions.create('width', {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
@@ -63,7 +63,6 @@ const DrawerStyles = (theme) => {
             backgroundColor : "white",
             opacity : "30%"
           }
-})
-};
+}));
 
-export default DrawerStyles;
+export default useDrawerStyles;

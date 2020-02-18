@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import DrawerStyles from './DrawerStyles';
+import React from 'react';
+import useDrawerStyles from './DrawerStyles';
 import clsx from 'clsx'
-import {withStyles,List,Divider, ListItem, ListItemText, Drawer, ListItemIcon} from '@material-ui/core'
+import {List,Divider, ListItem, ListItemText, Drawer, ListItemIcon} from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ListItemAvatar, Avatar } from '@material-ui/core';
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom'
 const listItemObject = [{
     id : 1,
     label : "Dashboard",
@@ -25,30 +24,23 @@ const listItemObject = [{
     icon : "InboxIcon"
 },
 ]
-class DrawerComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            selected : -1,
-        }
-    }
-    handleItemClick = (id) => {
+export default function DrawerComponent() {
+    const classes = useDrawerStyles();
+    const history = useHistory();
+    const isOpen = useSelector(state => state.ToggleDrawerReducer);
+    console.log(isOpen);
+    const handleItemClick = (id) => {
         switch(id){
             case 1: 
-                this.props.history.push("/");
+                history.push("/");
                 break;
             case 2:
-                this.props.history.push("/users");
+                history.push("/users");
                 break;
             default:
                 break;
+            }
         }
-    }
-    render() {
-        const isOpen = this.props.toggleDrawer.isOpen;
-        const {classes} = this.props;
-        const {selected} = this.state;
-        console.log(this.props)
         return (
                 <Drawer variant = "permanent"
                 className={clsx(classes.drawer, {
@@ -60,9 +52,7 @@ class DrawerComponent extends Component {
                     [classes.drawerOpen]: isOpen,
                     [classes.drawerClose] : !isOpen
                     }),
-                }}
-                onMouseEnter = {this.mouseEnter}
-                onMouseLeave = {this.mouseLeave}>
+                }}>
                     <List >
                         <ExpansionPanel className={classes.expandPanel}>
                             <ExpansionPanelSummary  className={classes.expandPanelSumary}
@@ -92,7 +82,7 @@ class DrawerComponent extends Component {
                             return(
                                 <ListItem button
                                 className = {classes.listItem}
-                                    onClick = {() => this.handleItemClick(item.id)}>
+                                    onClick = {() => handleItemClick(item.id)}>
                                     <ListItemIcon  className = {classes.listIcon}>
                                         {item.icon === "InboxIcon"? <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/> : null}
                                     </ListItemIcon>
@@ -105,8 +95,3 @@ class DrawerComponent extends Component {
                 </Drawer>
         );
     }
-}
-
-const mapStateToProps = (state) => ({toggleDrawer : state.ToggleDrawerReducer});
-
-export default withStyles(DrawerStyles)(withRouter((connect(mapStateToProps, null)(DrawerComponent))));

@@ -1,30 +1,28 @@
-import React, { Component } from 'react';
-import {withStyles, AppBar, Toolbar, IconButton, Button} from '@material-ui/core'
+import React from 'react';
+import {AppBar, Toolbar, IconButton, Button} from '@material-ui/core'
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AppBarStyles from './AppBar.Styles'
-import {connect} from 'react-redux'
+import useAppBarStyle from './AppBar.Styles'
 import { toggleOpen } from '../../../redux/Actions/ActionObjects/ActionsObjects';
-import clsx from 'clsx';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PersonIcon from '@material-ui/icons/Person';
 import Iconlist from '../IconList/Iconlist'
-class AppBarComp extends Component {
-
-    handleDrawerOpen = ()=>{
-        this.props.toggleDrawerByOpen();
+import {useSelector, useDispatch} from 'react-redux';
+export default function AppBarComp() {
+    const classes = useAppBarStyle();
+    const isOpen = useSelector(state => state.ToggleDrawerReducer);
+    const dispatch = useDispatch();
+    const handleDrawerOpen = () => {
+        dispatch(toggleOpen());
     }
-    render() {
-        const {isOpen} = this.props.toggleDrawer;
-        const {classes} = this.props;
-        return (
+    return (
         <AppBar
         position = "sticky"
         className={classes.AppBar}
         >
             <Toolbar>
                 <IconButton
-                    onClick={this.handleDrawerOpen}
+                    onClick={handleDrawerOpen}
                     elevation = {3}
                     className = {classes.menuButton}
                 >
@@ -38,16 +36,4 @@ class AppBarComp extends Component {
             </Toolbar>
         </AppBar>
         );
-    }
 }
-
-const mapStateToProps = (state) => ({
-    toggleDrawer : state.ToggleDrawerReducer
-})
-const mapDispatchToProps = (dispatch) =>({
-    toggleDrawerByOpen : ()=>{
-        dispatch(toggleOpen())
-    }
-})
-
-export default withStyles(AppBarStyles)(connect(mapStateToProps, mapDispatchToProps)(AppBarComp));

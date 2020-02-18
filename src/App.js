@@ -17,7 +17,7 @@ function App() {
         <MuiThemeProvider theme = {theme}>
           <CssBaseline/>
           <Router>
-            <PrivateRoute exact path = "/" component = {MainPage}/>
+            <PrivateRoute path = "/" component = {MainPage}/>
             <Route path = "/login" component = {LoginPage}/>
           </Router>
         </MuiThemeProvider>             

@@ -10,13 +10,6 @@ export async function postData(url = '', data = {}, isJwtValid) {
     }
     const newUrl = baseUrl + url;
     return Axios.post(newUrl, data, config)
-    .then(
-        response=>response,
-        err => {throw err;}
-    )
-    .catch(
-        error => error
-    );
   }
 
   export async function getData(url = '', isJwtValid) {
@@ -29,11 +22,4 @@ export async function postData(url = '', data = {}, isJwtValid) {
     }
     const newUrl = baseUrl + url;
     return Axios.get(newUrl, config)
-    .then(
-        response=>response,
-        err => {throw err;}
-    )
-    .catch(
-        error => error
-    );
   }

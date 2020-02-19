@@ -1,6 +1,5 @@
 import {FETCH_ALL_USER_SUCCESS, FETCH_ALL_USER_FAIL} from '../../Actions/ActionConstant/ActionConstants'
 const initialState = {
-    content:[],
 };
 
 const AllUserReducer = (state = initialState, action)=>{

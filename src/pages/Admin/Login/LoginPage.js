@@ -3,7 +3,7 @@ import { TextField, Button, Dialog, CircularProgress, Typography, Paper, Divider
 import {useLoginStyles} from './LoginPage.style'
 import {useSelector, useDispatch} from 'react-redux';
 import {login} from '../../../redux/Actions/ActionObjects/ActionsObjects'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 function LoginPage(){
     const [open, setOpen] = useState(false);
     const [state, setState] = useState({

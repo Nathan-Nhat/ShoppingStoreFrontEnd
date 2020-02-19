@@ -15,6 +15,8 @@ import {fetchAllUser, OpenPopUpUser} from '../../../redux/Actions/ActionObjects/
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import EditIcon from '@material-ui/icons/Edit';
 import DialogUserInfo from '../../../Components/Main/Dialog/DialogUserInfo'
+import Skeleton from '@material-ui/lab/Skeleton';
+
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -23,6 +25,9 @@ const useStyles = makeStyles({
         padding : "50px",
     },
     tableContainer : {
+        height: "70vh"
+    },
+    skeleton : {
         height: "70vh"
     }
   });
@@ -56,6 +61,9 @@ const UserManagerPage = () => {
         setCurrentUser(username);
         dispatch(OpenPopUpUser());
     }
+    useEffect(()=>{
+
+    })
     useEffect(() => {
        dispatch(fetchAllUser({
            page:page,
@@ -79,8 +87,19 @@ const UserManagerPage = () => {
                     <TableCell align="center">More Info</TableCell>
                 </TableRow>
                 </TableHead>
-                <TableBody>
-                {dataResponse.content.map(row => (
+                {dataResponse.content == null? (<TableBody>
+                    {[1,2,3,4,5,6,7,8,9,10,11,12].map((row, idx) => (<TableRow key = {idx}>
+                        <TableCell><Skeleton animation="wave" /></TableCell>
+                        <TableCell align="center" color><Skeleton animation="wave" /></TableCell>
+                        <TableCell align="center"><Skeleton animation="wave" /></TableCell>
+                        <TableCell align="center"><Skeleton animation="wave" /></TableCell>
+                        <TableCell align="center"><Skeleton animation="wave" /></TableCell>
+                        <TableCell align="center"><Skeleton animation="wave" /></TableCell>
+                    </TableRow>))}
+                </TableBody>)
+                : 
+                (<TableBody>
+                    {dataResponse.content.map(row => (
                     <TableRow key={row.id}>
                         <TableCell component="th" scope="row">{row.id}</TableCell>
                         <TableCell align="center">{row.username}</TableCell>
@@ -94,7 +113,7 @@ const UserManagerPage = () => {
                             </TableCell>
                     </TableRow>
                 ))}
-                </TableBody>
+                </TableBody>)}
             </Table>
         </TableContainer>
         <TablePagination
@@ -106,8 +125,8 @@ const UserManagerPage = () => {
                             onChangePage={handleChangePage}
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
-        </Paper>
         {isOpen?<DialogUserInfo username = {currentUser}/> : null}
+        </Paper>
     </div>
     );
 };

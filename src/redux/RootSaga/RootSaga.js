@@ -1,8 +1,18 @@
 import {fork, take, call, takeEvery, put, takeLatest} from 'redux-saga/effects'
 import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER} from '../Actions/ActionConstant/ActionConstants'
-import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, fetchSingleUserSuccess, fetchSingleUserFail} from '../Actions/ActionObjects/ActionsObjects'
+import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification} from '../Actions/ActionObjects/ActionsObjects'
 import {postData, getData} from '../../API/Api'
-/*==============Authentication Saga================*/
+import {push} from 'react-router-redux'
+/*==================History====================*/
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
+/*==============forward to history==============*/
+function forwardTo(location) {
+    console.log(history);
+    history.push(location);
+  }
+
+/*=============Authentication Saga================*/
 
 function* userLogin(action){
     // user login
@@ -13,15 +23,18 @@ function* userLogin(action){
         localStorage.setItem("jwt", response.data.jwtToken);
         yield put(loginSuccess());
     }
-    catch {
+    catch (error) {
+        console.log(error.response)
         yield put(loginFail());
+        yield handleErrorCode(error.response.data);
     }
 }
 
 function* userLogout(){
     //user log out
-    localStorage.removeItem("jwt");
+    yield localStorage.removeItem("jwt");
     yield put(logoutSuccess());
+    yield put(toggleNotification({isOpen : true, message : "Logout Successful", type : "success"}))
 }
 
 function* watchUserLogin(){
@@ -39,8 +52,8 @@ function* fetchAllUserSaga(action){
         console.log(response.data);
         yield put(fetchAllUserSuccess(response.data));
     }
-    catch{
-        yield put(fetchAllUserFail());
+    catch (error) {
+        yield handleErrorCode(error.response.data);
     }
 
 }
@@ -55,8 +68,8 @@ function* fetchSingleUserSaga(action){
         const response = yield call(getData, `/api/admin/users/${action.data.username}`, true);
         yield put(fetchSingleUserSuccess(response.data));
     }
-    catch{
-        yield put(fetchSingleUserFail());
+    catch(error) {
+        yield handleErrorCode(error.response.data);
     }
 }
 function* watchFetchSingleUser(){
@@ -72,3 +85,37 @@ function* rootSaga(){
 }
 
 export default rootSaga;
+
+/*=====================Local function=================================*/
+function* handleErrorCode(response){
+    switch(response.status)
+    {
+    case 403:
+        if(response.code === "USER_NOTFOUND"){
+            yield put(toggleNotification({isOpen : true, message : "Invalid Username or Password", type : "error"}));
+        } else if (response.code === "USER_DISABLE") {
+            yield put(toggleNotification({isOpen : true, message : "User have been disabled", type : "error"}));
+        } else {
+            yield put(toggleNotification({isOpen : true, message : "You dont have permission to view this", type : "error"}));
+        }
+        break;
+    case 500:
+        if(response.code === "INVALID_JWT_TOKEN"){
+            yield put(toggleNotification({isOpen : true, message : "Invalid JWT. Please Login again", type : "error"}));
+            yield call(forwardTo, '/login');
+        } else if (response.code === "EXPIRED_JWT_TOKEN"){
+            yield put(toggleNotification({isOpen : true, message : "JWT expired. Please Login again", type : "error"}));
+            yield call(forwardTo, '/login');
+        } else {
+            yield put(toggleNotification({isOpen : true, message : "Fail to fetch", type : "error"}));
+        }
+        break;
+    case 404: {
+            yield put(toggleNotification({isOpen : true, message : "Fail to fetch", type : "error"}));
+            break;
+        }
+    default:
+        yield put(toggleNotification({isOpen : true, message : "Fail to fetch", type : "error"}));
+        break;
+    }
+}

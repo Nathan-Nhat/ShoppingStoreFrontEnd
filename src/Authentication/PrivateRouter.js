@@ -1,5 +1,6 @@
 import React from 'react'
-import {Route, Redirect} from 'react-router-dom'
+import Redirect from 'react-router-dom/Redirect'
+import Route from 'react-router-dom/Route'
 import {useSelector} from 'react-redux'
 const PrivateRoute = ({component : Component, ...rest})=>{
     const isAuthentication = useSelector(state => state.AuthenticationReducer);

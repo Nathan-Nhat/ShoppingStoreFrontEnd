@@ -1,27 +1,26 @@
 import {fork, take, call, takeEvery, put, takeLatest} from 'redux-saga/effects'
-import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER} from '../Actions/ActionConstant/ActionConstants'
-import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification} from '../Actions/ActionObjects/ActionsObjects'
-import {postData, getData} from '../../API/Api'
-import {push} from 'react-router-redux'
-/*==================History====================*/
-import { createBrowserHistory } from 'history';
-const history = createBrowserHistory();
-/*==============forward to history==============*/
-function forwardTo(location) {
-    console.log(history);
-    history.push(location);
-  }
-
+import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER} from '../Actions/ActionConstant/ActionConstants'
+import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification, fetchAllUser} from '../Actions/ActionObjects/ActionsObjects'
+import {postData, getData, putData} from '../../API/Api'
+import {push} from 'connected-react-router'
 /*=============Authentication Saga================*/
 
 function* userLogin(action){
     // user login
     console.log("user login");
     try{
-       const response = yield call(postData, '/authenticate', action.payload, false);
+       const response = yield call(postData, '/authenticate', action.payload,{}, false);
        console.log(response);
+       if (response.data.roles === "ADMIN")
+       {
         localStorage.setItem("jwt", response.data.jwtToken);
         yield put(loginSuccess());
+        yield put(push("/"));
+        yield put(toggleNotification({isOpen : true, message : "Login Success", type : "success"}));
+       }
+       else{
+            yield put(toggleNotification({isOpen : true, message : "You dont have permission to visit this site", type : "error"}));
+       }
     }
     catch (error) {
         console.log(error.response)
@@ -34,7 +33,9 @@ function* userLogout(){
     //user log out
     yield localStorage.removeItem("jwt");
     yield put(logoutSuccess());
-    yield put(toggleNotification({isOpen : true, message : "Logout Successful", type : "success"}))
+    yield put(push("/login"));
+    yield put(toggleNotification({isOpen : true, message : "Logout Success", type : "success"}));
+
 }
 
 function* watchUserLogin(){
@@ -43,7 +44,7 @@ function* watchUserLogin(){
 
 function* watchUserLogout(){
     yield takeEvery(LOGOUT, userLogout);
-}
+}       
 
 /*==============Fetch All User Saga================*/
 function* fetchAllUserSaga(action){
@@ -65,7 +66,7 @@ function* watchFetchUsers(){
 /*====================Fetch single User===================*/
 function* fetchSingleUserSaga(action){
     try{
-        const response = yield call(getData, `/api/admin/users/${action.data.username}`, true);
+        const response = yield call(getData, `/api/admin/users/${action.data.username}`,{}, true);
         yield put(fetchSingleUserSuccess(response.data));
     }
     catch(error) {
@@ -75,6 +76,21 @@ function* fetchSingleUserSaga(action){
 function* watchFetchSingleUser(){
     yield takeEvery(FETCH_SINGLE_USER, fetchSingleUserSaga);
 }
+
+/*================Edit User==================*/
+function *submitEditUSer(action){
+    console.log(action);
+   try{
+    const response = yield call(putData, `/api/admin/users/`, action.data,{}, true);
+    yield put(fetchSingleUserSuccess(response.data));
+} catch(error) {
+        yield handleErrorCode(error.response.data);
+   }
+}
+
+function  *watchSubmitEditUser(){
+    yield takeEvery(SUBMIT_EDIT_USER, submitEditUSer);
+}
 /*==============Root Saga================*/
 function* rootSaga(){
     console.log('This is root saga');
@@ -82,6 +98,7 @@ function* rootSaga(){
     yield fork(watchFetchUsers);
     yield fork(watchFetchSingleUser);
     yield fork(watchUserLogout);
+    yield fork(watchSubmitEditUser);
 }
 
 export default rootSaga;
@@ -101,11 +118,15 @@ function* handleErrorCode(response){
         break;
     case 500:
         if(response.code === "INVALID_JWT_TOKEN"){
+            yield localStorage.removeItem("jwt");
+            yield put(logoutSuccess());
+            yield put(push("/login"));
             yield put(toggleNotification({isOpen : true, message : "Invalid JWT. Please Login again", type : "error"}));
-            yield call(forwardTo, '/login');
         } else if (response.code === "EXPIRED_JWT_TOKEN"){
+            yield localStorage.removeItem("jwt");
+            yield put(logoutSuccess());
+            yield put(push("/login"));
             yield put(toggleNotification({isOpen : true, message : "JWT expired. Please Login again", type : "error"}));
-            yield call(forwardTo, '/login');
         } else {
             yield put(toggleNotification({isOpen : true, message : "Fail to fetch", type : "error"}));
         }

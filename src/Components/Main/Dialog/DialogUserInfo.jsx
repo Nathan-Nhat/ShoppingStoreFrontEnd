@@ -3,12 +3,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import {Button, Zoom, Divider, InputBase, Box, TextField} from '@material-ui/core'
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector, useDispatch, useStore} from 'react-redux'
 import {ClosePopUpUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import useDialogStyles from './Dialog.Style'
 import TextComponent from './TextComponent'
-import {fetchSingleUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import {fetchSingleUser,submitEditUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import Skeleton from '@material-ui/lab/Skeleton';
+import { changeUserRole, changeUserStatus } from '../../../redux/Actions/ActionObjects/ActionsObjects';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom ref={ref} {...props} />;
@@ -19,19 +20,19 @@ export default function DialogUserInfo({username}) {
     const dispatch = useDispatch();
     const [isEditable, setEditable] = useState(false);
     const isOpen = useSelector(state => state.TogglePopUpUserReducers);
-    const [isLoading, setLoading] = useState(true);
-    console.log(userResponse.userDetails )
     const classes = useDialogStyles();
+    const store = useStore();
     const handleClose = ()=>{
         setEditable(false);
         dispatch(ClosePopUpUser());
     }
     const handleEdit = ()=> {
+        dispatch(changeUserRole(userResponse.roles))
+        dispatch(changeUserStatus(userResponse.status))
         setEditable(true);
     }
 
     const handleSave = () => {
-        setEditable(false)
     }
 
     const handleCacel = () => {
@@ -39,10 +40,15 @@ export default function DialogUserInfo({username}) {
     }
     useEffect(()=>{
         console.log("DIALOG DID MOUNT");
-
+        const username = store.getState().EditFormReducer.username;
         dispatch(fetchSingleUser({username : username}));
     }, []);
-
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        const data = store.getState().EditFormReducer;
+        dispatch(submitEditUser(data));
+        setEditable(false)
+    }
     return (
             <Dialog
             open={isOpen}
@@ -51,6 +57,7 @@ export default function DialogUserInfo({username}) {
             aria-describedby="scroll-dialog-description"
             maxWidth = {false}
         >
+            <form onSubmit = {handleSubmit}>
             {userResponse !== null ?<DialogContent className = {classes.content}>
                 <Box className = {classes.boxLeft}>
                     <img src = {userResponse.userDetails.avatarUrl} alt = "avatar" className = {classes.image}/>
@@ -60,10 +67,10 @@ export default function DialogUserInfo({username}) {
                 <Box className = {classes.boxRight}>
                     <TextComponent label = "Username" content = {userResponse.username} Editable = {false}/>
                     <Box className = {classes.innerRow}>
-                        <TextComponent label = "Roles"    content = {userResponse.roles}  style = {{width : "47%"}} isSelect = {true} 
-                            Editable = {isEditable && userResponse.roles === "ADMIN"} selectValue = {["ADMIN", "CUSTOMER"]} />
-                        <TextComponent label = "Status" content = {userResponse.status === 1? "ACTIVE" : "DISABLE"}  
-                            style = {{width : "47%"}} isSelect = {true} Editable = {isEditable  && userResponse.roles === "ADMIN"} selectValue = {["ACTIVE", "DISABLE"]}/>
+                        <TextComponent label = "Roles" name = "roles"  content = {userResponse.roles}  style = {{width : "47%"}} 
+                            />
+                        <TextComponent label = "Status" name = "status" content = {userResponse.status === 1? "ACTIVE" : "DISABLE"}  isSelect = {true}
+                            style = {{width : "47%"}}  Editable = {isEditable  && userResponse.roles !== "ADMIN"} selectValue = {["ACTIVE", "DISABLE"]}/>
                     </Box>
                     <TextComponent label = "Email" content = {userResponse.userDetails.email} Editable = {false}/>
                     <TextComponent label = "Phone" content = {userResponse.userDetails.phone} Editable = {false}/>
@@ -89,19 +96,20 @@ export default function DialogUserInfo({username}) {
                     </Box>
             </DialogContent>}
             <DialogActions>
-            {isEditable? <Button onClick={handleSave} color="secondary" variant = "contained" style = {{width : "90px"}}>
+            {isEditable && userResponse.roles !== "ADMIN" ? <Button type = "submit" color="secondary" variant = "contained" style = {{width : "90px"}}>
                 Save
             </Button> : null}
-            {!isEditable? <Button onClick={handleEdit} color= "primary" variant = "contained" style = {{width : "90px"}}>
+            {!isEditable && userResponse.roles !== "ADMIN" ? <Button onClick={handleEdit} color= "primary" variant = "contained" style = {{width : "90px"}}>
                 Edit
             </Button> : null}
-            {isEditable? <Button onClick={handleCacel} color="primary" variant = "contained" style = {{width : "90px"}}>
+            {isEditable && userResponse.roles !== "ADMIN" ? <Button onClick={handleCacel} color="primary" variant = "contained" style = {{width : "90px"}}>
                 Cancel
             </Button> : null}
             <Button onClick={handleClose} color="primary" variant = "outlined" style = {{width : "90px"}}>
                 Close
             </Button>
             </DialogActions>
+            </form>
         </Dialog>
     )
 }

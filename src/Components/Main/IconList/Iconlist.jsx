@@ -9,22 +9,16 @@ const Iconlist = (props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     let history = useHistory();
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector(state => state.AuthenticationReducer);
     const handleClick = (event) =>{
         setAnchorEl(event.currentTarget);
     }
     const handleClose = (position) => {
         setAnchorEl(null);
         if(position === 3){
+            console.log("===================================================\r\n");
             dispatch(logout());
         }
       };
-
-      useEffect(()=>{
-        if (isAuthenticated === 2){
-            history.push('/login');
-        }
-    }, [isAuthenticated])
     return (
         <div>
             <IconButton aria-haspopup="true" onClick={handleClick}

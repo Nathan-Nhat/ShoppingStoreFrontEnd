@@ -6,7 +6,7 @@ export async function postData(url = '', data = {}, isJwtValid) {
     const jwtToken = await getJwt();
     const AuthStr = "Bearer ".concat(jwtToken);
     if (isJwtValid){
-        config = {headers : { Authorization: AuthStr } }
+          config = {headers : { Authorization: AuthStr} }
     }
     const newUrl = baseUrl + url;
     return Axios.post(newUrl, data, config)
@@ -18,8 +18,20 @@ export async function postData(url = '', data = {}, isJwtValid) {
     const AuthStr = "Bearer ".concat(jwtToken);
     console.log(AuthStr)
     if (isJwtValid){
-        config = {headers : { Authorization: AuthStr,}}
+        config = {headers : { Authorization: AuthStr}}
+        console.log(config);
     }
     const newUrl = baseUrl + url;
     return Axios.get(newUrl, config)
+  }
+
+  export async function putData(url = '', data = {}, isJwtValid) {
+    let config = null;
+    const jwtToken = await getJwt();
+    const AuthStr = "Bearer ".concat(jwtToken);
+    if (isJwtValid){
+        config = {headers : { Authorization: AuthStr } }
+    }
+    const newUrl = baseUrl + url;
+    return Axios.put(newUrl, data, config)
   }

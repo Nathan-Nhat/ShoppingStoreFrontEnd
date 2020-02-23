@@ -1,13 +1,16 @@
 import React from 'react'
-import Redirect from 'react-router-dom/Redirect'
-import Route from 'react-router-dom/Route'
-import {useSelector} from 'react-redux'
-const PrivateRoute = ({component : Component, ...rest})=>{
-    const isAuthentication = useSelector(state => state.AuthenticationReducer);
+import {Redirect,Route} from 'react-router-dom'
+import {useStore} from 'react-redux'
+const PrivateRoute = ({children,...rest})=>{
+    const store = useStore();
+    console.log("1231231231231231231");
+    console.log(store.getState().AuthenticationReducer);
     return(
-    <Route {...rest} render = {()=>
-        isAuthentication === 1 ? <Component/> : <Redirect
-            to = "/login"/>
+    <Route {...rest} render = {({location})=>
+        store.getState().AuthenticationReducer === 1 ? children : <Redirect
+        to={{
+            pathname: "/login",
+          }}/>
     }/>)
 };
 export default PrivateRoute;

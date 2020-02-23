@@ -1,4 +1,4 @@
-import {LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT} from '../../Actions/ActionConstant/ActionConstants'
+import {LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS} from '../../Actions/ActionConstant/ActionConstants'
 const initialState = localStorage.getItem("jwt")? 1 : -1;
 
 const AuthenticationReducer = (state = initialState, action)=>{
@@ -7,8 +7,8 @@ const AuthenticationReducer = (state = initialState, action)=>{
             return 1;
         case LOGIN_FAIL:
             return 0;
-        case LOGOUT:
-            console.log(state);
+        case LOGOUT_SUCCESS:
+            console.log("123-" + state);
             return 2;
         default:
             return state;

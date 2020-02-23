@@ -1,7 +1,8 @@
 import {TOGGLE_OPEN, LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOGOUT_SUCCESS, 
     FETCH_ALL_USER, FETCH_ALL_USER_SUCCESS, FETCH_ALL_USER_FAIL, 
     FETCH_SINGLE_USER, FETCH_SINGLE_USER_SUCCESS, FETCH_SINGLE_USER_FAIL,
-    OPEN_POPUP_USER, CLOSE_POPUP_USER, TOGGLE_NOTIFICATION} from '../ActionConstant/ActionConstants'
+    OPEN_POPUP_USER, CLOSE_POPUP_USER, TOGGLE_NOTIFICATION, CHANGE_USER_ROLE, CHANGE_USER_STATUS, 
+    CHANGE_SELECTED_USER, SUBMIT_EDIT_USER, SUBMIT_EDIT_USER_FAIL, SUBMIT_EDIT_USER_SUCCESS} from '../ActionConstant/ActionConstants'
 export const toggleOpen = ()=>({
     type : TOGGLE_OPEN
 })
@@ -65,5 +66,34 @@ export const ClosePopUpUser = () =>({
 
 export const toggleNotification = (data) =>({
     type : TOGGLE_NOTIFICATION,
+    data
+})
+
+export const changeUserRole = (data)=> ({
+    type : CHANGE_USER_ROLE,
+    data
+})
+export const changeUserStatus = (data)=> ({
+    type : CHANGE_USER_STATUS,
+    data
+})
+
+export const changeSelectedUser = (data)=>({
+    type : CHANGE_SELECTED_USER,
+    data
+})
+
+export const submitEditUser = (data)=>({
+    type : SUBMIT_EDIT_USER,
+    data
+})
+
+export const submitEditUserSuccess = (data)=>({
+    type : SUBMIT_EDIT_USER_SUCCESS,
+    data
+})
+
+export const submitEditUserFail = (data)=>({
+    type : SUBMIT_EDIT_USER_FAIL,
     data
 })

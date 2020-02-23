@@ -6,12 +6,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {IconButton} from '@material-ui/core'
+import {IconButton, Container} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {fetchAllUser, OpenPopUpUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import {fetchAllUser, OpenPopUpUser, changeSelectedUser} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import EditIcon from '@material-ui/icons/Edit';
 import DialogUserInfo from '../../../Components/Main/Dialog/DialogUserInfo'
@@ -35,8 +35,8 @@ const useStyles = makeStyles({
 const UserManagerPage = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [currentUser, setCurrentUser] = useState("");
     const dataResponse = useSelector(state => state.AllUsersReducer);
+    const singleUserdataChange = useSelector(state => state.SingleUserReducer);
     const isOpen = useSelector(state => state.TogglePopUpUserReducers);
     var rowPerPage = 10;
     var page = 0;
@@ -58,12 +58,9 @@ const UserManagerPage = () => {
 
     const handleIconMoreClick = username =>{
         console.log(username);
-        setCurrentUser(username);
+        dispatch(changeSelectedUser(username));
         dispatch(OpenPopUpUser());
     }
-    useEffect(()=>{
-
-    })
     useEffect(() => {
        dispatch(fetchAllUser({
            page:page,
@@ -71,9 +68,15 @@ const UserManagerPage = () => {
        }))
     }, [])
 
+    useEffect(()=>{
+        dispatch(fetchAllUser({
+            page:page,
+            size:rowPerPage
+        }))
+    }, [singleUserdataChange])
     console.log(dataResponse);
     return (
-        <div className = {classes.container}>
+        <Container className = {classes.container}>
         <Paper>
         <TableContainer className = {classes.tableContainer}>
              <Table stickyHeader className={classes.table} aria-label="simple table">
@@ -125,9 +128,9 @@ const UserManagerPage = () => {
                             onChangePage={handleChangePage}
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
-        {isOpen?<DialogUserInfo username = {currentUser}/> : null}
+        {isOpen?<DialogUserInfo/> : null}
         </Paper>
-    </div>
+    </Container>
     );
 };
 

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import useDrawerStyles from './DrawerStyles';
 import clsx from 'clsx'
 import {List,Divider, ListItem, ListItemText, Drawer, ListItemIcon} from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ListItemAvatar, Avatar } from '@material-ui/core';
-import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography } from '@material-ui/core';
+import {IconButton, Typography, Collapse } from '@material-ui/core';
 import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom'
 const listItemObject = [{
@@ -18,16 +18,12 @@ const listItemObject = [{
     label : "Users",
     icon : "InboxIcon"
 },
-{
-    id : 3,
-    label : "Test3",
-    icon : "InboxIcon"
-},
 ]
 export default function DrawerComponent() {
     const classes = useDrawerStyles();
     const history = useHistory();
     const isOpen = useSelector(state => state.ToggleDrawerReducer);
+    const [expanded, setExpanded] = useState(false);
     console.log(isOpen);
     const handleItemClick = (id) => {
         switch(id){
@@ -41,6 +37,13 @@ export default function DrawerComponent() {
                 break;
             }
         }
+    const handleProductClick = () => {
+        setExpanded(!expanded);
+    }
+
+    const handleClickAddProduct = () => {
+        history.push("/add-product");
+    }
         return (
                 <Drawer variant = "permanent"
                 className={clsx(classes.drawer, {
@@ -54,28 +57,15 @@ export default function DrawerComponent() {
                     }),
                 }}>
                     <List >
-                        <ExpansionPanel className={classes.expandPanel}>
-                            <ExpansionPanelSummary  className={classes.expandPanelSumary}
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            >
-                                <ListItem>
-                                    <ListItemAvatar>
-                                    <Avatar
-                                        alt={`123`}
-                                        src={`https://www.w3schools.com/w3css/img_lights.jpg`}
-                                    />
-                                    </ListItemAvatar>
-                                    <ListItemText primary = "Tran Trung Nhat"/>
-                                </ListItem>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                            <Typography>
-                                log out
-                            </Typography>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                        <ListItem>
+                            <ListItemAvatar>
+                            <Avatar
+                                alt={`123`}
+                                src={`https://www.w3schools.com/w3css/img_lights.jpg`}
+                            />
+                            </ListItemAvatar>
+                            <ListItemText primary = "Tran Trung Nhat"/>
+                        </ListItem>
                         <Divider variant="middle" classes = {{root: classes.divider}} />
                         {
                         listItemObject.map((item, index)=>{
@@ -83,14 +73,40 @@ export default function DrawerComponent() {
                                 <ListItem button
                                 className = {classes.listItem}
                                     onClick = {() => handleItemClick(item.id)}>
-                                    <ListItemIcon  className = {classes.listIcon}>
-                                        {item.icon === "InboxIcon"? <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/> : null}
-                                    </ListItemIcon>
+                                    {item.icon === "InboxIcon"? <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/> : null}
                                 <ListItemText primary = {<Typography color = "textPrimary">{item.label}</Typography>}/>
                                 </ListItem>
                             )
                             })
                         }
+                        <ListItem button  className = {classes.listItem} onClick = {handleProductClick}>
+                            <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                            <ListItemText primary = {<Typography color = "textPrimary">Product</Typography>}/>
+                                <ExpandMoreIcon  className={clsx(classes.expand, {
+                                    [classes.expandOpen]: expanded,
+                                })}/>
+                        </ListItem>
+                        <Collapse in = {expanded} timeout = "auto" unmountOnExit className = {classes.collapse}>
+                            <ListItem button  className = {classes.listItem} onClick = {handleClickAddProduct}>
+                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
+                            </ListItem>
+                            <ListItem button  className = {classes.listItem}>
+                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
+                            </ListItem>
+                            <ListItem button  className = {classes.listItem}>
+                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
+                            </ListItem>
+                        </Collapse>
+                        <ListItem button  className = {classes.listItem}>
+                                    <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                    <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
+                        </ListItem>
+
+                        
+                            
                     </List>
                 </Drawer>
         );

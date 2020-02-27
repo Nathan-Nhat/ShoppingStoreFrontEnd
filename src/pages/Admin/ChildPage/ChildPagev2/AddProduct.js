@@ -74,6 +74,7 @@ const AddProductPage = () => {
         const formData = new FormData();
         formData.append('properties', new Blob([JSON.stringify(data)], {type :'application/json'}));
         formData.append('files',state.contentImage);
+        console.warn(data);
         state.detailImage.map(image => {
             formData.append("detailFiles", image);
         })
@@ -90,10 +91,15 @@ const AddProductPage = () => {
        
     }
     useEffect(()=>{
+        setDefault();
         getData('/api/admin/category', true)
         .then(res => setCategory(res.data))
         .catch(err => console.log(err));
     },[]);
+    const setDefault = ()=>{
+        detailImageObject = [];
+        previewDetailImageObj = [];
+    }
     return (
         <Container className = {classes.container}>
             <form onSubmit = {handleSubmit}>
@@ -165,9 +171,9 @@ const AddProductPage = () => {
             >
                 <DialogContent>
                     <Box>
-                        <Typography>Save User Success. Do you want to continue add?</Typography>
-                        <Button color = "primary" onClick = {()=>{setSuccess(false); setState(initState)}}>Yes</Button>
-                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products")}}>No</Button>
+                        <Typography>Save Product Success. Do you want to continue add?</Typography>
+                        <Button color = "primary" onClick = {()=>{setSuccess(false); setState(initState); setDefault()}}>Yes</Button>
+                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products"); setDefault()}}>No</Button>
                     </Box>
                 </DialogContent>
             </Dialog>
@@ -176,9 +182,9 @@ const AddProductPage = () => {
             >
                 <DialogContent>
                     <Box>
-                        <Typography>Fail to add Product. Do you want to continue add?</Typography>
-                        <Button color = "primary" onClick = {()=>{setFail(false)}}>Yes</Button>
-                        <Button color = "secondary" onClick = {()=>{setFail(false); history.push("/products")}}>No</Button>
+                        <Typography>Fail to add Product. Do you want to try again?</Typography>
+                        <Button color = "primary" onClick = {()=>{setFail(false); }}>Yes</Button>
+                        <Button color = "secondary" onClick = {()=>{setFail(false); history.push("/products"); setDefault()}}>No</Button>
                     </Box>
                 </DialogContent>
             </Dialog>

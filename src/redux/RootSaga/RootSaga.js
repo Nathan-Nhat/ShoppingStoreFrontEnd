@@ -1,6 +1,8 @@
 import {fork, take, call, takeEvery, put, takeLatest} from 'redux-saga/effects'
-import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER} from '../Actions/ActionConstant/ActionConstants'
-import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification, fetchAllUser} from '../Actions/ActionObjects/ActionsObjects'
+import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER, FETCH_ALL_PRODUCT} from '../Actions/ActionConstant/ActionConstants'
+import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, 
+    fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification, fetchAllUser,
+    fetchAllProductSuccess, fetchAllProductFail} from '../Actions/ActionObjects/ActionsObjects'
 import {postData, getData, putData} from '../../API/Api'
 import {push} from 'connected-react-router'
 /*=============Authentication Saga================*/
@@ -88,6 +90,20 @@ function *submitEditUSer(action){
    }
 }
 
+/*=====================Fetch all Product===========================*/
+function *fetchALlProductSaga(action){
+    try{
+        const response = yield call(getData, `/api/admin/all-products?page=${action.data.page}&size=${action.data.size}`, true);
+        yield put(fetchAllProductSuccess(response.data.content));
+    }catch(error){
+        yield put(fetchAllProductFail());
+        handleErrorCode(error.response);
+    }
+}
+function *watchFetchAllProduct(){
+    yield takeEvery(FETCH_ALL_PRODUCT, fetchALlProductSaga);
+}
+
 function  *watchSubmitEditUser(){
     yield takeEvery(SUBMIT_EDIT_USER, submitEditUSer);
 }
@@ -99,6 +115,7 @@ function* rootSaga(){
     yield fork(watchFetchSingleUser);
     yield fork(watchUserLogout);
     yield fork(watchSubmitEditUser);
+    yield fork(watchFetchAllProduct);
 }
 
 export default rootSaga;

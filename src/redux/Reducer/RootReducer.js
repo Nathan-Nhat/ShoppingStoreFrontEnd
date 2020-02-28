@@ -7,6 +7,7 @@ import TogglePopUpUserReducers from './ChildReducers/TogglePopUpUser'
 import NotificationReducer from './ChildReducers/NotificationReducer'
 import { connectRouter } from 'connected-react-router'
 import EditFormReducer from './ChildReducers/EditFormReducer'
+import AllProductReducer from './ChildReducers/AllProductReducer'
 const RootReducer = (history) => combineReducers({
     ToggleDrawerReducer,
     AuthenticationReducer,
@@ -15,6 +16,7 @@ const RootReducer = (history) => combineReducers({
     TogglePopUpUserReducers,
     NotificationReducer,
     EditFormReducer,
+    AllProductReducer,
     router: connectRouter(history)
 });
 export default RootReducer;

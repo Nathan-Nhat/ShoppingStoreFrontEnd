@@ -4,21 +4,15 @@ import {GridList, GridListTile, GridListTileBar } from '@material-ui/core'
 import themes from '../../../../Themes/DrawerThemes'
 import {useAddProductStyles} from './AddProduct.styles'
 import {FormControl, InputLabel, MenuItem, CircularProgress, DialogContent, Dialog} from '@material-ui/core'
-import {postData, getData, putData} from '../../../../API/Api'
+import {postData, getData} from '../../../../API/Api'
 import {useHistory} from 'react-router-dom'
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
+var detailImageObject = [];
+var previewDetailImageObj = [];
 const initState = {
     name : '',
     price : 0,
-    contentImage : null,
-    detailImage: [null, null, null, null, null, null],
     previewContentImage : '',
-    previewDetailImage : [
-        '', '', '', '', '', ''
-    ],
+    previewDetailImage : [],
     category: 1,
     description : ''
 }
@@ -55,38 +49,21 @@ const AddProductPage = () => {
             previewContentImage : URL.createObjectURL(value)
         })
     }
-    const handleDetailImageChange = (e, index) => {
+    const handleDetailImageChange = (e) => {
         e.preventDefault()
-        console.log(index);
         let value = e.target.files[0];
-        var imageDetail = state.detailImage;
-        var stateImageDetail = state.previewDetailImage;
-        imageDetail[index] = e.target.files[0];
-        stateImageDetail[index] = URL.createObjectURL(value);
-        console.log("test================");
+        detailImageObject.push(value)
+        previewDetailImageObj.push(URL.createObjectURL(value));
+        console.log(state);
         setState({
             ...state,
-            detailImage : imageDetail,
-            previewDetailImage1: stateImageDetail,
-        })
-    }
-
-    const handleDelete = (e, index) => {
-        console.log(index);
-        var stateImageDetail = state.previewDetailImage;
-        var imageDetail = state.imageDetail;
-        imageDetail[index] = null;
-        stateImageDetail[index] = '';
-        setState({
-            ...state,
-            detailImage : imageDetail,
-            previewDetailImage1: stateImageDetail,
+            detailImage : detailImageObject,
+            previewDetailImage: previewDetailImageObj,
         })
     }
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
-                id : "8ec525c7-b442-4838-9674-d9edcb42da4c",
                 name : state.name,
                 price : state.price,
                 description : state.description,
@@ -96,13 +73,12 @@ const AddProductPage = () => {
         formData.append('properties', new Blob([JSON.stringify(data)], {type :'application/json'}));
         formData.append('files',state.contentImage);
         console.warn(data);
-        console.log(state.detailImage)
         state.detailImage.map(image => {
             formData.append("detailFiles", image);
         })
         console.log(state.detailImage)
         setOpen(true);
-        putData('/api/admin/products/', formData, true)
+        postData('/api/admin/products/', formData, true)
         .then(response=> {
             setOpen(false);
             setSuccess(true)})
@@ -112,11 +88,29 @@ const AddProductPage = () => {
         });
        
     }
+    const setInfoToState = (info) =>{
+        const imageDetail = info.imageDetailProduct.map((item, index)=>item.imageDetails);
+        let temState = {
+            name : info.name,
+            price : info.price,
+            previewContentImage : info.imageMain,
+            previewDetailImage : imageDetail,
+            category : info.category.id,
+            description : info.description,
+        }
+        setState(temState);
+    }
     useEffect(()=>{
-        getData('/api/admin/category', true)
-        .then(res => setCategory(res.data))
+        let id = "399d5564-0287-4874-b153-1941d309f047";
+        setDefault();
+        getData(`/api/admin/products/${id}`, true)
+        .then(res => setInfoToState(res.data))
         .catch(err => console.log(err));
     },[]);
+    const setDefault = ()=>{
+        detailImageObject = [];
+        previewDetailImageObj = [];
+    }
     return (
         <Container className = {classes.container}>
             <form onSubmit = {handleSubmit}>
@@ -137,15 +131,15 @@ const AddProductPage = () => {
                                 <Select
                                 labelId="demo-simple-select-outlined-label"
                                 id="demo-simple-select-outlined"
-                                value={category[0].id}
+                                // value={category[0].id}
                                 name = "category"
                                 value = {state.category}
                                 onChange={handleChange}
                                 // labelWidth={labelWidth}
                                 >
-                                    {category.map((item, index) => 
+                                    {/* {category.map((item, index) => 
                                         <MenuItem value={item.id}>{item.name}</MenuItem>
-                                    )}
+                                    )} */}
                                 </Select>
                             </FormControl>
                         </Box>
@@ -163,31 +157,14 @@ const AddProductPage = () => {
                     </Box>
                 </Box>
                 <div className={classes.rootGridList}>
-                { [0,1,2,3,4,5].map((item, index) =>
-                    {
-                    return (<Card className={classes.root} key = {index}>
-                        <CardActionArea>
-                            <CardMedia
-                            component="img"
-                            alt="Contemplative Reptile"
-                            height="200"
-                            image= {state.previewDetailImage[index] !== '' ? state.previewDetailImage[index] : "https://acadianakarate.com/wp-content/uploads/2017/04/default-image.jpg"}
-                            title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                        <CardActions>
-                        <label htmlFor= {`upload-photo-${item}`} style = {{cursor : "pointer", background: "red"}}>Browse...</label>
-                        <input style = {{ zIndex: -1,
-                                            position: "absolute",
-                                        }}
-                            type="file" name="photo" id= {`upload-photo-${item}`} 
-                            onChange = {(e)=>handleDetailImageChange(e, index)}/>
-                            <Button size="small" color="primary" onClick = {(e)=> handleDelete(e, index)}>
-                            Learn More
-                            </Button>
-                        </CardActions>
-                    </Card>)}
-                )}
+                    <GridList className={classes.gridList} cols={3.5}>
+                        {[0, 1, 2, 3, 4].map((item, index)=><GridListTile key = {index}>
+                           <img src= {state.previewDetailImage[index]? state.previewDetailImage[index] : "https://acadianakarate.com/wp-content/uploads/2017/04/default-image.jpg"} /> 
+                        </GridListTile>
+                        )}
+                    </GridList>
+                    <TextField type = "file" style = {{right : "0"}} onChange = {handleDetailImageChange}/>
+                    
                 </div>
                 <Button type = "submit" variant = "contained" color = "primary">Upload</Button>
             </Paper>
@@ -206,8 +183,8 @@ const AddProductPage = () => {
                 <DialogContent>
                     <Box>
                         <Typography>Save Product Success. Do you want to continue add?</Typography>
-                        <Button color = "primary" onClick = {()=>{setSuccess(false); setState(initState); }}>Yes</Button>
-                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products");}}>No</Button>
+                        <Button color = "primary" onClick = {()=>{setSuccess(false); setState(initState); setDefault()}}>Yes</Button>
+                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products"); setDefault()}}>No</Button>
                     </Box>
                 </DialogContent>
             </Dialog>
@@ -218,7 +195,7 @@ const AddProductPage = () => {
                     <Box>
                         <Typography>Fail to add Product. Do you want to try again?</Typography>
                         <Button color = "primary" onClick = {()=>{setFail(false); }}>Yes</Button>
-                        <Button color = "secondary" onClick = {()=>{setFail(false); history.push("/products");}}>No</Button>
+                        <Button color = "secondary" onClick = {()=>{setFail(false); history.push("/products"); setDefault()}}>No</Button>
                     </Box>
                 </DialogContent>
             </Dialog>

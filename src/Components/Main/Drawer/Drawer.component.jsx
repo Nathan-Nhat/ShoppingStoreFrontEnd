@@ -44,6 +44,12 @@ export default function DrawerComponent() {
     const handleClickAddProduct = () => {
         history.push("/add-product");
     }
+    const handleClickProduct = () => {
+        history.push("products");
+    }
+    const handleClickEditProduct = () =>{
+        history.push("/edit-product");
+    }
         return (
                 <Drawer variant = "permanent"
                 className={clsx(classes.drawer, {
@@ -87,17 +93,17 @@ export default function DrawerComponent() {
                                 })}/>
                         </ListItem>
                         <Collapse in = {expanded} timeout = "auto" unmountOnExit className = {classes.collapse}>
+                            <ListItem button  className = {classes.listItem} onClick = {handleClickProduct}>
+                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <ListItemText primary = {<Typography color = "textPrimary">Product</Typography>}/>
+                            </ListItem>
                             <ListItem button  className = {classes.listItem} onClick = {handleClickAddProduct}>
                                 <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
                                 <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
                             </ListItem>
-                            <ListItem button  className = {classes.listItem}>
-                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
-                                <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
-                            </ListItem>
-                            <ListItem button  className = {classes.listItem}>
-                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
-                                <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
+                            <ListItem button  className = {classes.listItem} onClick = {handleClickEditProduct}>
+                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }} />
+                                <ListItemText primary = {<Typography color = "textPrimary">Edit Product</Typography>}/>
                             </ListItem>
                         </Collapse>
                         <ListItem button  className = {classes.listItem}>

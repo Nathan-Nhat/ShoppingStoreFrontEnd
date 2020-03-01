@@ -26,7 +26,6 @@ function App() {
               <PrivateRoute path = "/"> 
                 <MainPage /> 
               </PrivateRoute>
-                
             </Switch>   
           </ConnectedRouter>
           <Notification/>

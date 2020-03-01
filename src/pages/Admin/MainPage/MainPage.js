@@ -8,7 +8,7 @@ import UserManagerPage from '../ChildPage/UserManagerPage';
 import MainManagerPage from '../ChildPage/MainManagerPage';
 import AddProductPage from '../ChildPage/ChildPagev2/AddProduct';
 import ProductsPage from '../ChildPage/ChildPagev2/ProductsPage'
-import EditProduct from '../ChildPage/ChildPagev2/EditProduct';
+import ProductDetails from '../ChildPage/ChildPagev2/ProductDetails';
 function MainPage() {
         let { path, url } = useRouteMatch();
         const classes = useMainPageStyles(theme);
@@ -27,11 +27,11 @@ function MainPage() {
                         <Route path = "/add-product">
                             <AddProductPage/>
                         </Route>
-                        <Route path = "/products">
+                        <Route exact path = "/products">
                             <ProductsPage/>
                         </Route>
-                        <Route path = "/edit-product">
-                            <EditProduct/>
+                        <Route path = "/products/:id">
+                            <ProductDetails/>
                         </Route>
                     </Switch>
                 </div>

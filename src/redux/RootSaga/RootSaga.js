@@ -1,9 +1,9 @@
 import {fork, take, call, takeEvery, put, takeLatest} from 'redux-saga/effects'
-import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER, FETCH_ALL_PRODUCT} from '../Actions/ActionConstant/ActionConstants'
+import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER, FETCH_ALL_PRODUCT, SEARCH_PRODUCT_PAGE_SIZE, DELETE_PRODUCT} from '../Actions/ActionConstant/ActionConstants'
 import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, 
     fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification, fetchAllUser,
-    fetchAllProductSuccess, fetchAllProductFail} from '../Actions/ActionObjects/ActionsObjects'
-import {postData, getData, putData} from '../../API/Api'
+    fetchAllProductSuccess, searchProduct} from '../Actions/ActionObjects/ActionsObjects'
+import {postData, getData, putData, deleteData} from '../../API/Api'
 import {push} from 'connected-react-router'
 /*=============Authentication Saga================*/
 
@@ -94,10 +94,10 @@ function *submitEditUSer(action){
 function *fetchALlProductSaga(action){
     try{
         const response = yield call(getData, `/api/admin/all-products?page=${action.data.page}&size=${action.data.size}`, true);
-        yield put(fetchAllProductSuccess(response.data.content));
+        console.warn(response);
+        yield put(fetchAllProductSuccess(response.data));
     }catch(error){
-        yield put(fetchAllProductFail());
-        handleErrorCode(error.response);
+        handleErrorCode(error.response.data);
     }
 }
 function *watchFetchAllProduct(){
@@ -105,7 +105,33 @@ function *watchFetchAllProduct(){
 }
 
 function  *watchSubmitEditUser(){
-    yield takeEvery(SUBMIT_EDIT_USER, submitEditUSer);
+yield takeEvery(SUBMIT_EDIT_USER, submitEditUSer);
+}
+
+/*==================Search Product=================*/
+function *searchForProduct(action){
+    try{
+        const response = yield call(getData, `/api/public/products/search?query=${action.data.textSearch}&page=${action.data.page}&size=${action.data.size}`, true);
+        console.log(response);
+        yield put(fetchAllProductSuccess(response.data));
+    } catch(error) {
+        handleErrorCode(error.response.data)
+    }
+}
+function *watchSearchProduct(){
+    yield takeEvery(SEARCH_PRODUCT_PAGE_SIZE, searchForProduct);
+}
+/*==================Search Product=================*/
+function *deleteProductSaga(action){
+    try {
+        yield call(deleteData, `/api/admin/products/${action.data.id}`, null, true);
+        yield put(searchProduct(action.data.objSearch));
+    } catch(error){
+        handleErrorCode(error.response.data)
+    }
+}
+function *watchDeleteProduct(){
+    yield takeEvery(DELETE_PRODUCT, deleteProductSaga);
 }
 /*==============Root Saga================*/
 function* rootSaga(){
@@ -116,6 +142,8 @@ function* rootSaga(){
     yield fork(watchUserLogout);
     yield fork(watchSubmitEditUser);
     yield fork(watchFetchAllProduct);
+    yield fork(watchSearchProduct);
+    yield fork(watchDeleteProduct);
 }
 
 export default rootSaga;

@@ -6,21 +6,43 @@ import {useAddProductStyles} from './AddProduct.styles'
 import {FormControl, InputLabel, MenuItem, CircularProgress, DialogContent, Dialog} from '@material-ui/core'
 import {postData, getData, putData} from '../../../../API/Api'
 import {useHistory} from 'react-router-dom'
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
+import CardImage from '../../../../Components/Main/CardImage';
 const initState = {
     name : '',
     price : 0,
     contentImage : null,
-    detailImage: [null, null, null, null, null, null],
-    previewContentImage : '',
-    previewDetailImage : [
-        '', '', '', '', '', ''
-    ],
     category: 1,
     description : ''
+}
+const initDetailImage = {
+    detailImage_1: {
+        image : null,
+        preview_image: null,
+    },
+    detailImage_2: {
+        image : null,
+        preview_image: null,
+    },
+    detailImage_3: {
+        image : null,
+        preview_image: null,
+    },
+    detailImage_4: {
+        image : null,
+        preview_image: null,
+    },
+    detailImage_5: {
+        image : null,
+        preview_image: null,
+    },
+    detailImage_6: {
+        image : null,
+        preview_image: null,
+    },
+}
+const initContentImage = {
+    image: null,
+    preview_image : null
 }
 const AddProductPage = () => {
     const classes = useAddProductStyles(themes);
@@ -28,6 +50,8 @@ const AddProductPage = () => {
     const [success, setSuccess] = useState(false);
     const [fail, setFail] = useState(false);
     const [state, setState] = useState(initState);
+    const [contenImage, setContentImage] = useState(initContentImage);
+    const [detailImage, setDetailImage] = useState(initDetailImage);
     const [category, setCategory] = useState([{
         id : 1,
         name : ''
@@ -48,45 +72,77 @@ const AddProductPage = () => {
         let value = e.target.files[0];
         e.preventDefault()
         if (value === undefined) return;        
-
-        setState({
-            ...state,
-            contentImage : value,
-            previewContentImage : URL.createObjectURL(value)
+        setContentImage({
+            image : value,
+            preview_image : URL.createObjectURL(value)
         })
+    }
+    const setImage = (index, state)=> {
+        switch(index){
+            case 1:
+                setDetailImage({
+                    ...detailImage,
+                    detailImage_1 : state,
+                })
+                break;
+            case 2:
+                setDetailImage({
+                    ...detailImage,
+                    detailImage_2 : state,
+                })
+                break;
+            case 3:
+                setDetailImage({
+                    ...detailImage,
+                    detailImage_3 : state,
+                })
+                break;
+            case 4:
+                setDetailImage({
+                    ...detailImage,
+                    detailImage_4 : state,
+                })
+                break;
+            case 5:
+                setDetailImage({
+                ...detailImage,
+                detailImage_5 : state,
+                })
+                break;
+            case 6:
+                setDetailImage({
+                    ...detailImage,
+                    detailImage_6 : state,
+                })
+                break;
+            default:
+                break;
+        }
     }
     const handleDetailImageChange = (e, index) => {
         e.preventDefault()
-        console.log(index);
         let value = e.target.files[0];
-        var imageDetail = state.detailImage;
-        var stateImageDetail = state.previewDetailImage;
-        imageDetail[index] = e.target.files[0];
-        stateImageDetail[index] = URL.createObjectURL(value);
-        console.log("test================");
-        setState({
-            ...state,
-            detailImage : imageDetail,
-            previewDetailImage1: stateImageDetail,
-        })
+        console.log(value);
+        if (value === undefined) return;
+        let tempState = {
+            image : value,
+            preview_image: URL.createObjectURL(value)
+        }
+        setImage(index, tempState);
     }
 
     const handleDelete = (e, index) => {
         console.log(index);
-        var stateImageDetail = state.previewDetailImage;
-        var imageDetail = state.imageDetail;
-        imageDetail[index] = null;
-        stateImageDetail[index] = '';
-        setState({
-            ...state,
-            detailImage : imageDetail,
-            previewDetailImage1: stateImageDetail,
-        })
+        e.preventDefault();
+        let tempState = {
+            image : null,
+            preview_image: null
+        }
+        setImage(index, tempState);
     }
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
-                id : "8ec525c7-b442-4838-9674-d9edcb42da4c",
                 name : state.name,
                 price : state.price,
                 description : state.description,
@@ -94,15 +150,16 @@ const AddProductPage = () => {
         }
         const formData = new FormData();
         formData.append('properties', new Blob([JSON.stringify(data)], {type :'application/json'}));
-        formData.append('files',state.contentImage);
+        formData.append('files',contenImage.image);
         console.warn(data);
-        console.log(state.detailImage)
-        state.detailImage.map(image => {
-            formData.append("detailFiles", image);
-        })
-        console.log(state.detailImage)
+        formData.append("detailFiles1", detailImage.detailImage_1.image);
+        formData.append("detailFiles2", detailImage.detailImage_2.image);
+        formData.append("detailFiles3", detailImage.detailImage_3.image);
+        formData.append("detailFiles4", detailImage.detailImage_4.image);
+        formData.append("detailFiles5", detailImage.detailImage_5.image);
+        formData.append("detailFiles6", detailImage.detailImage_6.image);
         setOpen(true);
-        putData('/api/admin/products/', formData, true)
+        postData('/api/admin/products/', formData, true)
         .then(response=> {
             setOpen(false);
             setSuccess(true)})
@@ -123,7 +180,7 @@ const AddProductPage = () => {
             <Paper className = {classes.paper}>
                 <Box className = {classes.boxContainer}>
                     <Box className = {classes.boxLeft}>
-                        <img src = {state.previewContentImage !== ''? state.previewContentImage  : "https://acadianakarate.com/wp-content/uploads/2017/04/default-image.jpg"} className = {classes.img}/>
+                        <img src = {contenImage.preview_image !== null? contenImage.preview_image  : "https://acadianakarate.com/wp-content/uploads/2017/04/default-image.jpg"} className = {classes.img}/>
                         <TextField className = {classes.contentImage} type = "file" name = "contentImage" onChange = {handleImageChange}></TextField>
                     </Box> 
                     <Box className = {classes.boxRight}>
@@ -163,31 +220,18 @@ const AddProductPage = () => {
                     </Box>
                 </Box>
                 <div className={classes.rootGridList}>
-                { [0,1,2,3,4,5].map((item, index) =>
-                    {
-                    return (<Card className={classes.root} key = {index}>
-                        <CardActionArea>
-                            <CardMedia
-                            component="img"
-                            alt="Contemplative Reptile"
-                            height="200"
-                            image= {state.previewDetailImage[index] !== '' ? state.previewDetailImage[index] : "https://acadianakarate.com/wp-content/uploads/2017/04/default-image.jpg"}
-                            title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                        <CardActions>
-                        <label htmlFor= {`upload-photo-${item}`} style = {{cursor : "pointer", background: "red"}}>Browse...</label>
-                        <input style = {{ zIndex: -1,
-                                            position: "absolute",
-                                        }}
-                            type="file" name="photo" id= {`upload-photo-${item}`} 
-                            onChange = {(e)=>handleDetailImageChange(e, index)}/>
-                            <Button size="small" color="primary" onClick = {(e)=> handleDelete(e, index)}>
-                            Learn More
-                            </Button>
-                        </CardActions>
-                    </Card>)}
-                )}
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,1)} imgSrc = {detailImage.detailImage_1.preview_image} 
+                           onImageDelete = {(e) => handleDelete(e, 1)} idComp = "add1" />
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,2)} imgSrc = {detailImage.detailImage_2.preview_image} 
+                            onImageDelete = {(e) => handleDelete(e, 2)} idComp = "add2" />
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,3)} imgSrc = {detailImage.detailImage_3.preview_image} 
+                            onImageDelete = {(e) => handleDelete(e, 3)} idComp = "add3" />
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,4)} imgSrc = {detailImage.detailImage_4.preview_image} 
+                            onImageDelete = {(e) => handleDelete(e, 4)} idComp = "add4" />
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,5)} imgSrc = {detailImage.detailImage_5.preview_image} 
+                            onImageDelete = {(e) => handleDelete(e, 5)} idComp = "add5" />
+                    <CardImage onImageChange = {(e)=>handleDetailImageChange(e,6)} imgSrc = {detailImage.detailImage_6.preview_image} 
+                            onImageDelete = {(e) => handleDelete(e, 6)} idComp = "add6"/>
                 </div>
                 <Button type = "submit" variant = "contained" color = "primary">Upload</Button>
             </Paper>
@@ -207,7 +251,7 @@ const AddProductPage = () => {
                     <Box>
                         <Typography>Save Product Success. Do you want to continue add?</Typography>
                         <Button color = "primary" onClick = {()=>{setSuccess(false); setState(initState); }}>Yes</Button>
-                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products");}}>No</Button>
+                        <Button color = "secondary" onClick = {()=>{setSuccess(false); history.push("/products");setState(initState)}}>No</Button>
                     </Box>
                 </DialogContent>
             </Dialog>

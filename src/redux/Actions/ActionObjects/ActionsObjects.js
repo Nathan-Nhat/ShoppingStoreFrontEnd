@@ -3,7 +3,8 @@ import {TOGGLE_OPEN, LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOGOUT_SUCCESS,
     FETCH_SINGLE_USER, FETCH_SINGLE_USER_SUCCESS, FETCH_SINGLE_USER_FAIL,
     OPEN_POPUP_USER, CLOSE_POPUP_USER, TOGGLE_NOTIFICATION, CHANGE_USER_ROLE, CHANGE_USER_STATUS, 
     CHANGE_SELECTED_USER, SUBMIT_EDIT_USER, SUBMIT_EDIT_USER_FAIL, SUBMIT_EDIT_USER_SUCCESS, FETCH_ALL_PRODUCT, 
-    FETCH_ALL_PRODUCT_SUCCESS, FETCH_ALL_PRODUCT_FAIL} from '../ActionConstant/ActionConstants'
+    FETCH_ALL_PRODUCT_SUCCESS, FETCH_ALL_PRODUCT_FAIL, SEARCH_PRODUCT_PAGE_SIZE, PAGE_CHANGE, SIZE_CHANGE, SEARCH_TEXT_CHANGE,
+    DELETE_PRODUCT} from '../ActionConstant/ActionConstants'
 export const toggleOpen = ()=>({
     type : TOGGLE_OPEN
 })
@@ -110,5 +111,29 @@ export const fetchAllProductSuccess = (data) => ({
 
 export const fetchAllProductFail = (data) => ({
     type : FETCH_ALL_PRODUCT_FAIL,
+    data
+})
+
+export const searchProduct = (data) => ({
+    type : SEARCH_PRODUCT_PAGE_SIZE,
+    data
+})
+
+export const pageChange = (data) => ({
+    type : PAGE_CHANGE,
+    data
+})
+export const sizeChange = (data) => ({
+    type : SIZE_CHANGE,
+    data
+})
+
+export const searchTextChange = (data) => ({
+    type : SEARCH_TEXT_CHANGE,
+    data
+})
+
+export const deleteProduct = (data) => ({
+    type : DELETE_PRODUCT,
     data
 })

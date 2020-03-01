@@ -8,6 +8,7 @@ import NotificationReducer from './ChildReducers/NotificationReducer'
 import { connectRouter } from 'connected-react-router'
 import EditFormReducer from './ChildReducers/EditFormReducer'
 import AllProductReducer from './ChildReducers/AllProductReducer'
+import SearchReducer from  './ChildReducers/SearchReducer'
 const RootReducer = (history) => combineReducers({
     ToggleDrawerReducer,
     AuthenticationReducer,
@@ -17,6 +18,7 @@ const RootReducer = (history) => combineReducers({
     NotificationReducer,
     EditFormReducer,
     AllProductReducer,
+    SearchReducer,
     router: connectRouter(history)
 });
 export default RootReducer;

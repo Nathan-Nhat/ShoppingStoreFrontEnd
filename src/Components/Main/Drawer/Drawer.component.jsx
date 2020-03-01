@@ -45,10 +45,7 @@ export default function DrawerComponent() {
         history.push("/add-product");
     }
     const handleClickProduct = () => {
-        history.push("products");
-    }
-    const handleClickEditProduct = () =>{
-        history.push("/edit-product");
+        history.push("/products");
     }
         return (
                 <Drawer variant = "permanent"
@@ -100,10 +97,6 @@ export default function DrawerComponent() {
                             <ListItem button  className = {classes.listItem} onClick = {handleClickAddProduct}>
                                 <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
                                 <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
-                            </ListItem>
-                            <ListItem button  className = {classes.listItem} onClick = {handleClickEditProduct}>
-                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }} />
-                                <ListItemText primary = {<Typography color = "textPrimary">Edit Product</Typography>}/>
                             </ListItem>
                         </Collapse>
                         <ListItem button  className = {classes.listItem}>

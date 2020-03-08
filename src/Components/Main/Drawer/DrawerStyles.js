@@ -34,16 +34,6 @@ const useDrawerStyles = makeStyles((theme) => ({
           listIcon : {
             width : "40px"
           },
-          listItem: {
-            opacity : "50%",
-            '&:hover': {
-              opacity : "100%",
-              backgroundColor: "transparent"
-            },
-            '&:selection': {
-              opacity : "100%"
-            }
-          },
           center : {
               marginLeft : "9px"
           },
@@ -61,10 +51,9 @@ const useDrawerStyles = makeStyles((theme) => ({
           },
           divider :{
             backgroundColor : "white",
-            opacity : "30%"
           },
           collapse : {
-            marginLeft : "20px"
+            
           },
           expand: {
             transform: 'rotate(0deg)',
@@ -76,6 +65,7 @@ const useDrawerStyles = makeStyles((theme) => ({
           expandOpen: {
             transform: 'rotate(180deg)',
           },
+          toolbar: theme.mixins.toolbar,
 }));
 
 export default useDrawerStyles;

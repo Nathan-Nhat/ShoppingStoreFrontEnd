@@ -3,61 +3,31 @@ export const useAddProductStyles = makeStyles(theme => ({
     container : {
         padding: "50px",
     },
-    form : {
-        display : "flex",
-        flexDirection : "column",
-    },
-    paper: {
-          margin: "auto",
-          minWidth : 650,
-          minHeight : 600,
-          display : "flex",
-          flexDirection : "column",
-          '& > *' : {
-              height : "100%"
-          }
-      },
-    boxContainer : {
+      labelBtn : {
         display : "flex",
         flexDirection : "row",
-    },
-    boxLeft : {
-        width : "40%",
-        display : "flex",
-        flexDirection : "column",
-    },
-    boxRight : {
-        width : "60%",
-        display : "flex",
-        flexDirection : "column",
-        '& > *' : {
-            marginTop :"10px"
+        '&:hover': {
+            cursor : "pointer"
+        }
+      },
+      instruct :{ 
+        position : "sticky",
+        width : "25%", 
+        marginLeft : "30px", 
+        height : "180px",
+        top : "80px",
+        minWidth : "250px",
+        padding : "10px"
+      },
+      childElement :{
+        fontSize : "16px",
+        cursor : "pointer",
+        '&:hover' : {
+          textDecoration : "underline",
+          color : "blue"
         },
-        marginRight: "10px"
-    },
-    img : {
-        height: "300px",
-        width : "80%",
-        margin : "30px auto"
-    },
-    contentImage : {
-        width : "80%",
-        margin : "0px auto"
-    },
-    rootGridList: {
-        padding :"50px",
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    }, 
-    gridList : {
-        flexWrap: 'nowrap',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-    },
-    formControl : {
-        width : "47%",
-    }
+        '&:actove' : {
+          fontWeight : "bold"
+        }
+      }
 }));

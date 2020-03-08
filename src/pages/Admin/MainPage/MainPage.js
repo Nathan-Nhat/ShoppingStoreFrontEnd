@@ -9,19 +9,23 @@ import MainManagerPage from '../ChildPage/MainManagerPage';
 import AddProductPage from '../ChildPage/ChildPagev2/AddProduct';
 import ProductsPage from '../ChildPage/ChildPagev2/ProductsPage'
 import ProductDetails from '../ChildPage/ChildPagev2/ProductDetails';
+import UserDetails from '../ChildPage/ChildPagev2/UserDetails'
+const { width, height } = window;
 function MainPage() {
         let { path, url } = useRouteMatch();
         const classes = useMainPageStyles(theme);
+        console.log(width)
         return (
-            <div style = {{display : "flex"}}>
-                <DrawerComponent/>
-                <div style = {{width: "100%"}}>
-                    <AppBarComponent/>
+            <div style = {{display : "flex", flexDirection : "column"}}>
+                <AppBarComponent/>
+                <div>
+                    <DrawerComponent/>
+                    <div style = {{marginLeft : "240px"}}>
                     <Switch>
                         <Route exact path = {path}>
                                 <MainManagerPage/>
                         </Route>
-                        <Route path = "/users">
+                        <Route exact path = "/users">
                             <UserManagerPage/>
                         </Route>
                         <Route path = "/add-product">
@@ -33,7 +37,11 @@ function MainPage() {
                         <Route path = "/products/:id">
                             <ProductDetails/>
                         </Route>
+                        <Route path = "/users/:username">
+                            <UserDetails/>
+                        </Route>
                     </Switch>
+                </div>
                 </div>
             </div>
         );

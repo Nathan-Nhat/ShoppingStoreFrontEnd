@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {login} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import {useStore} from 'react-redux'
 import {useHistory} from 'react-router-dom'
+import AppBarComp from '../../../Components/Main/AppBar/AppBar.Component';
 function LoginPage(){
     const store = useStore();
     const isAuthenticated = useSelector(state => state.AuthenticationReducer)
@@ -35,6 +36,7 @@ function LoginPage(){
     }
     return (
         <div className = {classes.root}>
+            <AppBarComp/>
             <Paper elevation={4} className = {classes.paper}>
                 <Typography align = "center" variant = "h2" className = {classes.title} color = "textSecondary"> Login</Typography>
                 <Divider variant = "middle"/>

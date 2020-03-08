@@ -6,7 +6,26 @@ import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUse
 import {postData, getData, putData, deleteData} from '../../API/Api'
 import {push} from 'connected-react-router'
 /*=============Authentication Saga================*/
-
+function convertNumberToCategory(number){
+    switch(number){
+        case 0 : 
+            return "all";
+        case 1 : 
+            return "Phones";
+        case 2 : 
+            return "Laptops";
+        case 3 : 
+            return "Watches";
+        case 4 : 
+            return "Accessories";
+        case 5:
+            return "Cameras";
+        case 6:
+            return "Sports"
+        default:
+            break;
+    }
+}
 function* userLogin(action){
     // user login
     console.log("user login");
@@ -51,7 +70,7 @@ function* watchUserLogout(){
 /*==============Fetch All User Saga================*/
 function* fetchAllUserSaga(action){
     try{
-        const response = yield call(getData, `/api/admin/all-users?page=${action.data.page}&size=${action.data.size}`, true);
+        const response = yield call(getData, `/api/secured/all-users?search=${action.data.textSearch}&page=${action.data.page}&size=${action.data.size}`, true);
         console.log(response.data);
         yield put(fetchAllUserSuccess(response.data));
     }
@@ -68,7 +87,7 @@ function* watchFetchUsers(){
 /*====================Fetch single User===================*/
 function* fetchSingleUserSaga(action){
     try{
-        const response = yield call(getData, `/api/admin/users/${action.data.username}`,{}, true);
+        const response = yield call(getData, `/api/secured/users/${action.data.username}`,{}, true);
         yield put(fetchSingleUserSuccess(response.data));
     }
     catch(error) {
@@ -83,25 +102,11 @@ function* watchFetchSingleUser(){
 function *submitEditUSer(action){
     console.log(action);
    try{
-    const response = yield call(putData, `/api/admin/users/`, action.data,{}, true);
+    const response = yield call(putData, `/api/secured/users/`, action.data,{}, true);
     yield put(fetchSingleUserSuccess(response.data));
 } catch(error) {
         yield handleErrorCode(error.response.data);
    }
-}
-
-/*=====================Fetch all Product===========================*/
-function *fetchALlProductSaga(action){
-    try{
-        const response = yield call(getData, `/api/admin/all-products?page=${action.data.page}&size=${action.data.size}`, true);
-        console.warn(response);
-        yield put(fetchAllProductSuccess(response.data));
-    }catch(error){
-        handleErrorCode(error.response.data);
-    }
-}
-function *watchFetchAllProduct(){
-    yield takeEvery(FETCH_ALL_PRODUCT, fetchALlProductSaga);
 }
 
 function  *watchSubmitEditUser(){
@@ -111,7 +116,7 @@ yield takeEvery(SUBMIT_EDIT_USER, submitEditUSer);
 /*==================Search Product=================*/
 function *searchForProduct(action){
     try{
-        const response = yield call(getData, `/api/public/products/search?query=${action.data.textSearch}&page=${action.data.page}&size=${action.data.size}`, true);
+        const response = yield call(getData, `/api/public/products/search?query=${action.data.textSearch}&page=${action.data.page}&size=${action.data.size}&category=${convertNumberToCategory(action.data.category)}&type=price&sort=asc`, false);
         console.log(response);
         yield put(fetchAllProductSuccess(response.data));
     } catch(error) {
@@ -124,7 +129,7 @@ function *watchSearchProduct(){
 /*==================Search Product=================*/
 function *deleteProductSaga(action){
     try {
-        yield call(deleteData, `/api/admin/products/${action.data.id}`, null, true);
+        yield call(deleteData, `/api/secured/products/${action.data.id}`, true);
         yield put(searchProduct(action.data.objSearch));
     } catch(error){
         handleErrorCode(error.response.data)
@@ -141,7 +146,6 @@ function* rootSaga(){
     yield fork(watchFetchSingleUser);
     yield fork(watchUserLogout);
     yield fork(watchSubmitEditUser);
-    yield fork(watchFetchAllProduct);
     yield fork(watchSearchProduct);
     yield fork(watchDeleteProduct);
 }

@@ -1,30 +1,21 @@
 import React, {useState} from 'react';
 import useDrawerStyles from './DrawerStyles';
 import clsx from 'clsx'
-import {List,Divider, ListItem, ListItemText, Drawer, ListItemIcon} from '@material-ui/core'
+import {List,Divider, ListItem, ListItemText, Box} from '@material-ui/core'
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ListItemAvatar, Avatar } from '@material-ui/core';
-import {IconButton, Typography, Collapse } from '@material-ui/core';
+import {Paper, Typography, Collapse } from '@material-ui/core';
 import {useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom'
-const listItemObject = [{
-    id : 1,
-    label : "Dashboard",
-    icon : "InboxIcon"
-},
-{
-    id : 2,
-    label : "Users",
-    icon : "InboxIcon"
-},
-]
+import {useHistory} from 'react-router-dom';
+import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
+import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
+import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 export default function DrawerComponent() {
     const classes = useDrawerStyles();
     const history = useHistory();
-    const isOpen = useSelector(state => state.ToggleDrawerReducer);
     const [expanded, setExpanded] = useState(false);
-    console.log(isOpen);
+    const currentUser = useSelector(state => state.SingleUserReducer);
     const handleItemClick = (id) => {
         switch(id){
             case 1: 
@@ -48,18 +39,8 @@ export default function DrawerComponent() {
         history.push("/products");
     }
         return (
-                <Drawer variant = "permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: isOpen,
-                    [classes.drawerClose] : !isOpen
-                    })}
-                classes={{
-                    paper: clsx(classes.drawer, {
-                    [classes.drawerOpen]: isOpen,
-                    [classes.drawerClose] : !isOpen
-                    }),
-                }}>
-                    <List >
+            <Paper style={{height: "100%", overflow: 'auto', width : "240px", position : "fixed"}} square>
+                <List>
                         <ListItem>
                             <ListItemAvatar>
                             <Avatar
@@ -70,43 +51,39 @@ export default function DrawerComponent() {
                             <ListItemText primary = "Tran Trung Nhat"/>
                         </ListItem>
                         <Divider variant="middle" classes = {{root: classes.divider}} />
-                        {
-                        listItemObject.map((item, index)=>{
-                            return(
-                                <ListItem button
-                                className = {classes.listItem}
-                                    onClick = {() => handleItemClick(item.id)}>
-                                    {item.icon === "InboxIcon"? <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/> : null}
-                                <ListItemText primary = {<Typography color = "textPrimary">{item.label}</Typography>}/>
-                                </ListItem>
-                            )
-                            })
-                        }
+                       
+                        <ListItem button  className = {classes.listItem} onClick = {()=>handleItemClick(1)}>
+                            <DashboardRoundedIcon className = {classes.center} style={{ marginRight: "20px" }}/>
+                            <ListItemText primary = {<Typography color = "textPrimary">Dashboard</Typography>}/>
+                        </ListItem>
+
+                        <ListItem button  className = {classes.listItem} onClick = {()=>handleItemClick(2)}>
+                            <GroupRoundedIcon className = {classes.center} style={{ marginRight: "20px" }}/>
+                            <ListItemText primary = {<Typography color = "textPrimary">Users</Typography>}/>
+                        </ListItem>
+
                         <ListItem button  className = {classes.listItem} onClick = {handleProductClick}>
-                            <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                            <SettingsRoundedIcon className = {classes.center} style={{ marginRight: "20px" }}/>
                             <ListItemText primary = {<Typography color = "textPrimary">Product</Typography>}/>
                                 <ExpandMoreIcon  className={clsx(classes.expand, {
                                     [classes.expandOpen]: expanded,
                                 })}/>
                         </ListItem>
-                        <Collapse in = {expanded} timeout = "auto" unmountOnExit className = {classes.collapse}>
+                        <Collapse in = {expanded} timeout = "auto" unmountOnExit>
                             <ListItem button  className = {classes.listItem} onClick = {handleClickProduct}>
-                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <Box className = {classes.center} style={{ marginRight: "20px" , width :"20px" }}/>
                                 <ListItemText primary = {<Typography color = "textPrimary">Product</Typography>}/>
                             </ListItem>
                             <ListItem button  className = {classes.listItem} onClick = {handleClickAddProduct}>
-                                <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                <Box className = {classes.center} style={{ marginRight: "20px", width :"20px"}}/>
                                 <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
                             </ListItem>
                         </Collapse>
                         <ListItem button  className = {classes.listItem}>
-                                    <InboxIcon className = {classes.center} style={{ color: "#ffffff" }}/>
+                                    <InboxIcon className = {classes.center} style={{ marginRight: "20px" }}/>
                                     <ListItemText primary = {<Typography color = "textPrimary">Add Product</Typography>}/>
                         </ListItem>
-
-                        
-                            
-                    </List>
-                </Drawer>
+                </List>
+            </Paper>
         );
     }

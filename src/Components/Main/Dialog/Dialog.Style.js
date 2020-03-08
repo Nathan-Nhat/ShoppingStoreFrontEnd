@@ -2,31 +2,47 @@ import {makeStyles} from '@material-ui/core'
 
 const useDialogStyle = makeStyles({
     content : {
-        width: "800px", 
-        height : "600px", 
-        display : "flex" ,
-        flexDirection : "row"
+        width: "400px", 
+        height : "530px",
     },
-    boxLeft: {
-        display : "flex" ,
-        flexDirection : "column"
+    closeBtn : {
+        position : "absolute",
+        right : 0,
+    },
+    imageContainer : {
+        marginTop : "40px"
     },
     image : {
-        height : "200px",
-        width: "200px"
+        width : "130px",
+        height : "130px",
+        display: "block",
+        margin: "auto",
+        borderRadius : "50%"
     },
-    boxRight: {
-        display : "flex" ,
-        flexDirection : "column",
-        flexGrow : 1,
-        justifyContent : "space-around"
+    nameContainer : {
+        marginTop : "20px",
+        textAlign : "center"
     },
-    innerRow : {
+    name : {
+        fontSize : "25px",
+        fontWeight: "bold",
+    },
+    email : {
         display : "flex",
-        flexDirection : "row",
-        justifyContent : "space-between"
+        flexDirection :"row",
+        justifyContent:"center"
+    },
+    detail :{
+        marginTop : "20px",
+        height : "180px", 
+        backgroundColor : "#f5f5f5",
+        padding : "30px"
+    },
+    action : {
+        marginTop : "20px",
+        textAlign : "center"
+    },
+    detailBtn : {
     }
-
-
 })
 export default useDialogStyle;

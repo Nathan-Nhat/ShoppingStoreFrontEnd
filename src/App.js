@@ -21,7 +21,7 @@ function App() {
           <ConnectedRouter history={history}>
             <Switch>
             <Route exact path = "/login">
-                  <LoginPage/>
+                <LoginPage/>
                 </Route>
               <PrivateRoute path = "/"> 
                 <MainPage /> 

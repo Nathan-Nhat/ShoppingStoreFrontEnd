@@ -4,7 +4,7 @@ import {TOGGLE_OPEN, LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOGOUT_SUCCESS,
     OPEN_POPUP_USER, CLOSE_POPUP_USER, TOGGLE_NOTIFICATION, CHANGE_USER_ROLE, CHANGE_USER_STATUS, 
     CHANGE_SELECTED_USER, SUBMIT_EDIT_USER, SUBMIT_EDIT_USER_FAIL, SUBMIT_EDIT_USER_SUCCESS, FETCH_ALL_PRODUCT, 
     FETCH_ALL_PRODUCT_SUCCESS, FETCH_ALL_PRODUCT_FAIL, SEARCH_PRODUCT_PAGE_SIZE, PAGE_CHANGE, SIZE_CHANGE, SEARCH_TEXT_CHANGE,
-    DELETE_PRODUCT} from '../ActionConstant/ActionConstants'
+    DELETE_PRODUCT, CATEGORY_CHANGE, USER_PAGE_CHANGE, USER_SIZE_CHANGE, USER_SEARCH_TEXT_CHANGE} from '../ActionConstant/ActionConstants'
 export const toggleOpen = ()=>({
     type : TOGGLE_OPEN
 })
@@ -135,5 +135,24 @@ export const searchTextChange = (data) => ({
 
 export const deleteProduct = (data) => ({
     type : DELETE_PRODUCT,
+    data
+})
+
+export const categoryChange = (data) => ({
+    type : CATEGORY_CHANGE,
+    data
+})
+
+export const userPageChange = (data) => ({
+    type : USER_PAGE_CHANGE,
+    data
+})
+export const userSizeChange = (data) => ({
+    type : USER_SIZE_CHANGE,
+    data
+})
+
+export const userSearchTextChange = (data) => ({
+    type : USER_SEARCH_TEXT_CHANGE,
     data
 })

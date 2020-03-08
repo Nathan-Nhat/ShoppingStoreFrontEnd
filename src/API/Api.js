@@ -35,13 +35,14 @@ export async function postData(url = '', data = {}, isJwtValid) {
     const newUrl = baseUrl + url;
     return Axios.put(newUrl, data, config)
   }
-  export async function deleteData(url = '', data = {}, isJwtValid) {
+  export async function deleteData(url = '', isJwtValid) {
     let config = null;
+    console.log(isJwtValid);
     const jwtToken = await getJwt();
     const AuthStr = "Bearer ".concat(jwtToken);
     if (isJwtValid){
         config = {headers : { Authorization: AuthStr } }
     }
     const newUrl = baseUrl + url;
-    return Axios.delete(newUrl, data, config)
+    return Axios.delete(newUrl, config)
   }

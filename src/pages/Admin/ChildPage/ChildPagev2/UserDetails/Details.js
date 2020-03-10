@@ -15,6 +15,9 @@ import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
 const StyledTableCell = withStyles(theme => ({
     body: {
       fontSize: 14,
+      maxWidth : "170px",
+      wordWrap: 'break-word',
+      whiteSpace: 'normal',
     },
   }))(TableCell);
 const Details = ({currentUser}) => {
@@ -38,7 +41,7 @@ const Details = ({currentUser}) => {
     return (
         <div>
                 <Box style = {{marginTop : "30px", display : "flex", flexDirection : "row", justifyContent :"space-between"}}>
-                    <Paper style = {{width : "23%", minWidth : "350px"}}>
+                    <Paper style = {{width : "23%", minWidth : "250px"}}>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -64,7 +67,7 @@ const Details = ({currentUser}) => {
                             </TableRow>
                             <TableRow style = {{backgroundColor : "#ebebeb"}}>
                                 <StyledTableCell>Date Created</StyledTableCell>
-                                <StyledTableCell>{currentUser.dateCreated}</StyledTableCell>
+                                <StyledTableCell>{currentUser.dateCreated !== undefined ?currentUser.dateCreated.substring(0, 10) : ''}</StyledTableCell>
                             </TableRow>
                             <TableRow>
                                 <StyledTableCell>Status</StyledTableCell>
@@ -78,7 +81,7 @@ const Details = ({currentUser}) => {
                         </Table>
                     </Paper>
 
-                    <Paper style = {{width : "23%", minWidth : "350px", height : "50%"}}>
+                    <Paper style = {{width : "23%", minWidth : "250px", height : "50%"}}>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -114,7 +117,7 @@ const Details = ({currentUser}) => {
                         </Table>
                     </Paper>
 
-                    <Paper style = {{width : "23%", minWidth : "350px", height : "50%", padding :"10px"}}>
+                    <Paper style = {{width : "23%", minWidth : "250px", height : "50%", padding :"10px"}}>
                         <Typography style = {{fontSize : "20px", fontWeight : "bold",marginBottom : "10px"}}>Send emails</Typography>
                         <Divider></Divider>
                         <div style = {{display :"flex", flexDirection : "column", marginTop : "20px"}}>
@@ -135,7 +138,7 @@ const Details = ({currentUser}) => {
                         </div>
                     </Paper>
 
-                    <Paper style = {{width : "23%", minWidth : "350px", height : "50%", padding :"10px"}}>
+                    <Paper style = {{width : "23%", minWidth : "250px", height : "50%", padding :"10px"}}>
                         <Typography style = {{fontSize : "20px", fontWeight : "bold",marginBottom : "10px"}}>Other Actions</Typography>
                         <Divider></Divider>
                         {currentUser.roles === "ADMIN" ?<div>
@@ -158,7 +161,7 @@ const Details = ({currentUser}) => {
                                 </div>
                             </Button>}
                             <Typography style = {{fontSize : "13px", marginTop : "10px"}}>
-                                Remove this this customerâ€™s data if he requested that, if not please be aware that what has been deleted can never brough back
+                                Remove this this customer??™s data if he requested that, if not please be aware that what has been deleted can never brough back
                             </Typography>
                             <Button variant = "contained" style = {{marginTop : "10px", backgroundColor : "red"}}> 
                                 <DeleteForeverRoundedIcon/>

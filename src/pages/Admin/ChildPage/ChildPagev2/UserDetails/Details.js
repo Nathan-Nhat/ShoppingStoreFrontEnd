@@ -36,7 +36,7 @@ const Details = ({currentUser}) => {
         setloadingBtn(false);
     }, [currentUser])
     const handleSelectChange = () =>{
-
+        console.log("123");
     }
     return (
         <div>
@@ -161,7 +161,7 @@ const Details = ({currentUser}) => {
                                 </div>
                             </Button>}
                             <Typography style = {{fontSize : "13px", marginTop : "10px"}}>
-                                Remove this this customer??™s data if he requested that, if not please be aware that what has been deleted can never brough back
+                                Remove this this customer??ï¿½s data if he requested that, if not please be aware that what has been deleted can never brough back
                             </Typography>
                             <Button variant = "contained" style = {{marginTop : "10px", backgroundColor : "red"}}> 
                                 <DeleteForeverRoundedIcon/>

@@ -10,7 +10,6 @@ import LoginPage from "./pages/Admin/Login/LoginPage";
 import MainPage from "./pages/Admin/MainPage/MainPage";
 import Notification from "./Components/Notification/Notification"
 import { ConnectedRouter } from 'connected-react-router'
-
 const store = storeConfig();
 function App() {
     // console.log(LoginPage);

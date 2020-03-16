@@ -1,62 +1,29 @@
 import React, { useEffect } from 'react';
-import CardMain from '../../../Components/Main/CardMain'
-import MouseRoundedIcon from '@material-ui/icons/MouseRounded';
 import { Typography, Paper } from '@material-ui/core';
-import Chart from '../../../Components/Main/Dashboard/ChartComponent';
 import TableUsers from '../../../Components/Main/Dashboard/TableUsers';
 import TableOrders from '../../../Components/Main/Dashboard/TableOrders';
 import ChartComponent from '../../../Components/Main/Dashboard/ChartComponent';
+import SumaryComponent from '../../../Components/Main/Dashboard/SumaryComponent'
 const MainManagerPage = () => {
 
     return (
-        <div style={{ padding: "30px" }}>
-            <Typography>Dashboard</Typography>
-            <Typography>Hello Admin</Typography>
-            <Typography>Here's what's happening</Typography>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                <div style={{ width: "24%", minWidth: "150px" }}>
-                    <CardMain content="Total Click" value="1234">
-                        <MouseRoundedIcon style={{
-                            fontSize: "40px", padding: "10px", fontWeight: "bold",
-                            borderRadius: "50%", color: "white", backgroundColor: "green"
-                        }} />
-                    </CardMain>
-                </div>
-                <div style={{ width: "24%", minWidth: "150px" }}>
-                    <CardMain content="Total Click" value="1234">
-                        <MouseRoundedIcon style={{
-                            fontSize: "40px", padding: "10px", fontWeight: "bold",
-                            borderRadius: "50%", color: "white", backgroundColor: "green"
-                        }} />
-                    </CardMain>
-                </div>
-                <div style={{ width: "24%", minWidth: "150px" }}>
-                    <CardMain content="Total Click" value="1234">
-                        <MouseRoundedIcon style={{
-                            fontSize: "40px", padding: "10px", fontWeight: "bold",
-                            borderRadius: "50%", color: "white", backgroundColor: "green"
-                        }} />
-                    </CardMain>
-                </div>
-                <div style={{ width: "24%", minWidth: "150px" }}>
-                    <CardMain content="Total Click" value="1234">
-                        <MouseRoundedIcon style={{
-                            fontSize: "40px", padding: "10px", fontWeight: "bold",
-                            borderRadius: "50%", color: "white", backgroundColor: "green"
-                        }} />
-                    </CardMain>
-                </div>
+        <div style={{ margin: "30px 40px 0px 40px" }}>
+            <Typography style = {{fontSize : "13px", marginTop : "10px"}}>DASHBOARD</Typography>
+            <Typography style = {{fontSize : "30px", fontWeight:"bold", marginTop : "10px"}}>Hello, Admin</Typography>
+            <Typography style = {{marginTop : "10px"}}>Here's what's happening last 7 days</Typography>
+            <div style = {{marginTop : "30px"}}>
+                <SumaryComponent />
             </div>
             <div style={{
                 display: "flex", flexDirection: "row",
                 height: "500px", justifyContent: "space-between", marginTop: "20px"
             }}>
                 <div style={{ width: "24%", minWidth: "150px" }}>
-                    <Paper style={{ width: "100%", height : "100%" }}>
+                    <Paper style={{ width: "100%", height: "100%" }}>
 
                     </Paper>
                 </div>
-                <div style={{ width: "74.5%", minWidth: "350px", height : "100%" }}>
+                <div style={{ width: "50%", minWidth: "350px", height: "100%" }}>
                     <ChartComponent />
                 </div>
             </div>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Paper, Typography, Divider, FormControl, Select, MenuItem } from '@material-ui/core';
 import { getData } from '../../../API/Api';
+import {handleError} from '../../../redux/Actions/ActionObjects/ActionsObjects'
+import {connect} from 'react-redux'
 const style1Month = {
   label: 'Number Orders',
   fill: false,
@@ -72,7 +74,7 @@ const style7Day = {
   maintainAspectRatio: false,
   responsive: true,
 }
-export default class ChartComponent extends Component {
+class ChartComponent extends Component {
   constructor(props) {
     super(props);
     this.chartReference = React.createRef();
@@ -131,7 +133,8 @@ export default class ChartComponent extends Component {
         })
 
       }).catch(error => {
-        console.log(error);
+        // console.log(error.response.data);
+        this.props.dispatch(handleError(error.response.data))
       })
   }
   render() {
@@ -164,3 +167,4 @@ export default class ChartComponent extends Component {
   }
 
 }
+export default connect()(ChartComponent); 

@@ -1,5 +1,5 @@
 import {fork, take, call, takeEvery, put, takeLatest} from 'redux-saga/effects'
-import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER, FETCH_ALL_PRODUCT, SEARCH_PRODUCT_PAGE_SIZE, DELETE_PRODUCT} from '../Actions/ActionConstant/ActionConstants'
+import {LOGIN, LOGOUT, FETCH_ALL_USER, FETCH_SINGLE_USER, SUBMIT_EDIT_USER, FETCH_ALL_PRODUCT, SEARCH_PRODUCT_PAGE_SIZE, DELETE_PRODUCT, HANDLE_ERROR} from '../Actions/ActionConstant/ActionConstants'
 import {loginSuccess, loginFail, logoutSuccess, fetchAllUserSuccess, fetchAllUserFail, 
     fetchSingleUserSuccess, fetchSingleUserFail,toggleNotification, fetchAllUser,
     fetchAllProductSuccess, searchProduct} from '../Actions/ActionObjects/ActionsObjects'
@@ -138,6 +138,11 @@ function *deleteProductSaga(action){
 function *watchDeleteProduct(){
     yield takeEvery(DELETE_PRODUCT, deleteProductSaga);
 }
+/* ================Watch handle Error============*/
+function *watchHandleError(){
+    yield takeEvery(HANDLE_ERROR, handleErrorCode);
+}
+
 /*==============Root Saga================*/
 function* rootSaga(){
     console.log('This is root saga');
@@ -148,12 +153,15 @@ function* rootSaga(){
     yield fork(watchSubmitEditUser);
     yield fork(watchSearchProduct);
     yield fork(watchDeleteProduct);
+    yield fork(watchHandleError);
 }
 
 export default rootSaga;
 
 /*=====================Local function=================================*/
-function* handleErrorCode(response){
+function* handleErrorCode(action){
+    const response = action.data;
+    console.log(response);
     switch(response.status)
     {
     case 403:

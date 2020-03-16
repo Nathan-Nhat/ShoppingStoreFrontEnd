@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
-    "clsx": "^1.0.4",
+    "clsx": "^1.1.0",
     "connected-react-router": "^6.5.0",
     "express-favicon": "^2.0.1",
     "history": "^4.10.1",

@@ -15,7 +15,8 @@ import AttachMoneyRoundedIcon from '@material-ui/icons/AttachMoneyRounded';
 import ImageComponent from '../../../../Components/Main/ImageComponent'
 import { StepIcon } from '@material-ui/core';
 import { Element, animateScroll as scroll, scroller } from 'react-scroll'
-
+import {useDispatch} from 'react-redux'
+import { handleError } from '../../../../redux/Actions/ActionObjects/ActionsObjects';
 
 const initState = {
     name : '',
@@ -43,7 +44,7 @@ const AddProductPage = ({id}) => {
             [name]: value
         })
     }
-
+    const dispatch = useDispatch();
     const history = useHistory();
     async function handleImageChange(e){
         let value = e.target.files[0];
@@ -93,7 +94,8 @@ const AddProductPage = ({id}) => {
                 setSuccess(true)
             } catch (error) {
                 setOpen(false);
-                setFail(true)
+                setFail(true);
+                dispatch(handleError(error.response))
             }
     }
 
@@ -143,7 +145,10 @@ const AddProductPage = ({id}) => {
     useEffect(()=>{
         getData(`/api/public/products?id=${id}`, false)
         .then(response => setDataFromResponse(response))
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error.response.data)
+            dispatch(handleError(error.response.data))
+        })
     },[])
 
     const setDataFromResponse = (response) => {

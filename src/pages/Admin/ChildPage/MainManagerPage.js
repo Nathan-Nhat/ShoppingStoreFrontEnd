@@ -3,7 +3,8 @@ import { Typography, Paper } from '@material-ui/core';
 import TableUsers from '../../../Components/Main/Dashboard/TableUsers';
 import TableOrders from '../../../Components/Main/Dashboard/TableOrders';
 import ChartComponent from '../../../Components/Main/Dashboard/ChartComponent';
-import SumaryComponent from '../../../Components/Main/Dashboard/SumaryComponent'
+import SumaryComponent from '../../../Components/Main/Dashboard/SumaryComponent';
+import IncomeChart from '../../../Components/Main/Dashboard/IncomeChart';
 const MainManagerPage = () => {
 
     return (
@@ -18,12 +19,10 @@ const MainManagerPage = () => {
                 display: "flex", flexDirection: "row",
                 height: "500px", justifyContent: "space-between", marginTop: "20px"
             }}>
-                <div style={{ width: "24%", minWidth: "150px" }}>
-                    <Paper style={{ width: "100%", height: "100%" }}>
-
-                    </Paper>
+                <div style={{ width: "49.25%", minWidth: "150px" }}>
+                    <IncomeChart/>
                 </div>
-                <div style={{ width: "50%", minWidth: "350px", height: "100%" }}>
+                <div style={{ width: "49.25%", minWidth: "350px", height: "100%" }}>
                     <ChartComponent />
                 </div>
             </div>

@@ -95,7 +95,9 @@ const AddProductPage = ({id}) => {
             } catch (error) {
                 setOpen(false);
                 setFail(true);
+                if(error.response !== undefined){
                 dispatch(handleError(error.response))
+                }
             }
     }
 

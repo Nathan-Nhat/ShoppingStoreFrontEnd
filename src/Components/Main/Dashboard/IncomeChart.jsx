@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { Paper, Typography, Divider, FormControl, Select, MenuItem } from '@material-ui/core';
 import { getData } from '../../../API/Api';
 import {handleError} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import {connect} from 'react-redux'
 const style1Month = {
   label: 'Number Orders',
-  fill: false,
-  lineTension: 0.4,
-  backgroundColor: 'rgba(75,192,192,0.4)',
-  borderColor: '#3f51b5',
-  borderWidth: 2,
-  borderCapStyle: 'butt',
-  borderDash: [],
-  borderDashOffset: 0.0,
-  borderJoinStyle: 'miter',
-  pointBorderColor: '#3f51b5',
-  pointBackgroundColor: '#fff',
-  pointBorderWidth: 2,
-  pointHoverRadius: 3,
-  pointHoverBackgroundColor: '#3f51b5',
-  pointHoverBorderColor: '#fff',
-  pointHoverBorderWidth: 3,
-  pointRadius: 3,
-  pointHitRadius: 4,
+  maintainAspectRatio: false,
+  backgroundColor: 'rgba(75,192,192,0.8)',
+  hoverBackgroundColor : "rgba(175,192,192,0.4)",
   maintainAspectRatio: false,
   responsive: true,
 }
@@ -33,48 +18,19 @@ const style3Month = {
   fill: false,
   lineTension: 0.4,
   backgroundColor: 'rgba(75,192,192,0.4)',
-  borderColor: '#3f51b5',
-  borderWidth: 1,
-  borderCapStyle: 'butt',
-  borderDash: [],
-  borderDashOffset: 0.0,
-  borderJoinStyle: 'miter',
-  pointBorderColor: '#3f51b5',
-  pointBackgroundColor: '#fff',
-  pointBorderWidth: 2,
-  pointHoverRadius: 3,
-  pointHoverBackgroundColor: '#3f51b5',
-  pointHoverBorderColor: '#fff',
-  pointHoverBorderWidth: 3,
-  pointRadius: 2,
-  pointHitRadius: 3,
+  hoverBackgroundColor : "rgba(175,192,192,0.8)",
   maintainAspectRatio: false,
   responsive: true,
 }
 const style7Day = {
   label: 'Number Orders',
-  fill: false,
   lineTension: 0.4,
   backgroundColor: 'rgba(75,192,192,0.4)',
-  borderColor: '#3f51b5',
-  borderWidth: 4,
-  borderCapStyle: 'butt',
-  borderDash: [],
-  borderDashOffset: 0.0,
-  borderJoinStyle: 'miter',
-  pointBorderColor: '#3f51b5',
-  pointBackgroundColor: '#fff',
-  pointBorderWidth: 3,
-  pointHoverRadius: 7,
-  pointHoverBackgroundColor: '#3f51b5',
-  pointHoverBorderColor: '#fff',
-  pointHoverBorderWidth: 4,
-  pointRadius: 7,
-  pointHitRadius: 10,
+  hoverBackgroundColor : "rgba(175,192,192,0.8)",
   maintainAspectRatio: false,
   responsive: true,
 }
-class ChartComponent extends Component {
+class IncomeChart extends Component {
   constructor(props) {
     super(props);
     this.chartReference = React.createRef();
@@ -162,7 +118,7 @@ class ChartComponent extends Component {
         </div>
         <Divider style={{ marginTop: "20px" }} />
         <div style={{ flexGrow: 1, marginTop: "10px" }}>
-          <Line ref={this.chartReference} data={this.state.data}
+          <Bar ref={this.chartReference} data={this.state.data}
             options={{ maintainAspectRatio: false, responsive: true }} redraw={true} />
         </div>
       </Paper>
@@ -170,4 +126,4 @@ class ChartComponent extends Component {
   }
 
 }
-export default connect()(ChartComponent); 
+export default connect()(IncomeChart); 

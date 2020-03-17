@@ -86,7 +86,10 @@ const AddProductPage = () => {
     useEffect(() => {
         getData('/api/public/category', true)
             .then(res => setCategory(res.data))
-            .catch(err => dispatch(handleError(err.response.data)));
+            .catch(err => {
+                if(err.response !== undefined)
+                dispatch(handleError(err.response.data));
+            });
     }, []);
 
     const handleBtnBackClick = () => {

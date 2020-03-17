@@ -4,7 +4,8 @@ import { Paper, Typography, Divider, FormControl, Select, MenuItem } from '@mate
 import { getData } from '../../../API/Api';
 import {handleError} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import {connect} from 'react-redux'
-const style1Month = {
+import theme from '../../../Themes/DrawerThemes'
+const style1Month = theme => ({
   label: 'Number Orders',
   fill: false,
   lineTension: 0.4,
@@ -26,9 +27,9 @@ const style1Month = {
   pointHitRadius: 4,
   maintainAspectRatio: false,
   responsive: true,
-}
+})
 
-const style3Month = {
+const style3Month = theme => ({
   label: 'Number Orders',
   fill: false,
   lineTension: 0.4,
@@ -50,8 +51,8 @@ const style3Month = {
   pointHitRadius: 3,
   maintainAspectRatio: false,
   responsive: true,
-}
-const style7Day = {
+})
+const style7Day = theme => ({
   label: 'Number Orders',
   fill: false,
   lineTension: 0.4,
@@ -73,18 +74,19 @@ const style7Day = {
   pointHitRadius: 10,
   maintainAspectRatio: false,
   responsive: true,
-}
+})
 class ChartComponent extends Component {
   constructor(props) {
     super(props);
     this.chartReference = React.createRef();
+    this.style = style7Day(theme);
     this.state = {
       selected: 7,
       data: {
         labels: [],
         datasets: [
           {
-            ...style7Day,
+            ...this.style,
             data: []
           },
         ]
@@ -93,19 +95,19 @@ class ChartComponent extends Component {
   }
   handleChange = (e) => {
     let newVal = e.target.value;
+    this.style = newVal === 7? style7Day(theme) : (newVal === 30? style1Month(theme): style3Month(theme));
     getData(`/api/secured/analyst/orders?num-days=${newVal}`, true)
       .then(response => {
         console.log(response);
         var label = response.data.map((item) => item.date.substring(0, 5));
         var numberOrders = response.data.map((item) => item.numberOrders);
-        var style = newVal === 7 ? style7Day : (newVal === 30 ? style1Month : style3Month)
         this.setState({
           ...this.state,
           selected: newVal,
           data: {
             labels: [...label],
             datasets: [{
-              ...style,
+              ...this.style,
               data: [...numberOrders]
             }]
           }
@@ -116,6 +118,7 @@ class ChartComponent extends Component {
       })
   }
   componentWillMount() {
+    this.style = style7Day(theme);
     getData(`/api/secured/analyst/orders?num-days=${this.state.selected}`, true)
       .then(response => {
         console.log(response);
@@ -126,7 +129,7 @@ class ChartComponent extends Component {
           data: {
             labels: [...label],
             datasets: [{
-              ...style7Day,
+              ...this.style,
               data: [...numberOrders]
             }]
           }

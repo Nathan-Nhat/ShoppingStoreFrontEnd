@@ -8,7 +8,7 @@ import IncomeChart from '../../../Components/Main/Dashboard/IncomeChart';
 const MainManagerPage = () => {
 
     return (
-        <div style={{ margin: "30px 40px 0px 40px" }}>
+        <div style={{ margin: "30px 40px 40px 40px" }}>
             <Typography style = {{fontSize : "13px", marginTop : "10px"}}>DASHBOARD</Typography>
             <Typography style = {{fontSize : "30px", fontWeight:"bold", marginTop : "10px"}}>Hello, Admin</Typography>
             <Typography style = {{marginTop : "10px"}}>Here's what's happening last 7 days</Typography>
@@ -28,12 +28,12 @@ const MainManagerPage = () => {
             </div>
             <div style={{
                 display: "flex", flexDirection: "row",
-                justifyContent: "space-between", marginTop: "20px", height: "500px"
+                justifyContent: "space-between", marginTop: "20px", minWidth :"500px"
             }}>
                 <div style={{ width: "39.5%", minWidth: "150px" }}>
                     <TableUsers></TableUsers>
                 </div>
-                <div style={{ width: "59%", minWidth: "350px" }}>
+                <div style={{ width: "59%", minWidth: "450px" }}>
                     <TableOrders />
                 </div>
             </div>

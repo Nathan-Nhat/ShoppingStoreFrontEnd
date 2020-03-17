@@ -4,43 +4,27 @@ import { Paper, Typography, Divider, FormControl, Select, MenuItem } from '@mate
 import { getData } from '../../../API/Api';
 import {handleError} from '../../../redux/Actions/ActionObjects/ActionsObjects'
 import {connect} from 'react-redux'
-const style1Month = {
-  label: 'Number Orders',
-  maintainAspectRatio: false,
-  backgroundColor: 'rgba(75,192,192,0.8)',
-  hoverBackgroundColor : "rgba(175,192,192,0.4)",
-  maintainAspectRatio: false,
-  responsive: true,
-}
-
-const style3Month = {
-  label: 'Number Orders',
-  fill: false,
+import theme from '../../../Themes/DrawerThemes'
+const styleDay = theme => ({
+  label: 'Income ($)',
   lineTension: 0.4,
-  backgroundColor: 'rgba(75,192,192,0.4)',
-  hoverBackgroundColor : "rgba(175,192,192,0.8)",
+  backgroundColor: theme.palette.secondary.main,
+  hoverBackgroundColor : theme.palette.primary.main,
   maintainAspectRatio: false,
   responsive: true,
-}
-const style7Day = {
-  label: 'Number Orders',
-  lineTension: 0.4,
-  backgroundColor: 'rgba(75,192,192,0.4)',
-  hoverBackgroundColor : "rgba(175,192,192,0.8)",
-  maintainAspectRatio: false,
-  responsive: true,
-}
+})
 class IncomeChart extends Component {
   constructor(props) {
     super(props);
     this.chartReference = React.createRef();
+    this.style7Day = styleDay(theme);
     this.state = {
       selected: 7,
       data: {
         labels: [],
         datasets: [
           {
-            ...style7Day,
+            ...this.style7Day,
             data: []
           },
         ]
@@ -49,41 +33,44 @@ class IncomeChart extends Component {
   }
   handleChange = (e) => {
     let newVal = e.target.value;
-    getData(`/api/secured/analyst/orders?num-days=${newVal}`, true)
+    getData(`/api/secured/analyst/revenue?num-days=${newVal}`, true)
       .then(response => {
         console.log(response);
         var label = response.data.map((item) => item.date.substring(0, 5));
-        var numberOrders = response.data.map((item) => item.numberOrders);
-        var style = newVal === 7 ? style7Day : (newVal === 30 ? style1Month : style3Month)
+        var totalIncome = response.data.map((item) => (item.totalIncome/100000)/23000);
         this.setState({
           ...this.state,
-          selected: newVal,
+          selected : newVal,
           data: {
             labels: [...label],
             datasets: [{
-              ...style,
-              data: [...numberOrders]
+              ...this.style7Day,
+              data: [...totalIncome]
             }]
           }
         })
 
       }).catch(error => {
-        console.log(error);
+        // console.log(error.response.data);
+        if (error.response !== undefined)
+        {
+          this.props.dispatch(handleError(error.response.data));
+        }
       })
   }
   componentWillMount() {
-    getData(`/api/secured/analyst/orders?num-days=${this.state.selected}`, true)
+    getData(`/api/secured/analyst/revenue?num-days=${this.state.selected}`, true)
       .then(response => {
         console.log(response);
         var label = response.data.map((item) => item.date.substring(0, 5));
-        var numberOrders = response.data.map((item) => item.numberOrders);
+        var totalIncome = response.data.map((item) => (item.totalIncome/100000)/23000);
         this.setState({
           ...this.state,
           data: {
             labels: [...label],
             datasets: [{
-              ...style7Day,
-              data: [...numberOrders]
+              ...this.style7Day,
+              data: [...totalIncome]
             }]
           }
         })

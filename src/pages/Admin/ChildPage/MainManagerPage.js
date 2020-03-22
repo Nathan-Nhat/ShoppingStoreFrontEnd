@@ -30,10 +30,10 @@ const MainManagerPage = () => {
                 display: "flex", flexDirection: "row",
                 justifyContent: "space-between", marginTop: "20px", minWidth :"500px"
             }}>
-                <div style={{ width: "39.5%", minWidth: "150px" }}>
+                <div style={{ width: "39.5%", minWidth: "400px" }}>
                     <TableUsers></TableUsers>
                 </div>
-                <div style={{ width: "59%", minWidth: "450px" }}>
+                <div style={{ width: "59%", minWidth: "600px" }}>
                     <TableOrders />
                 </div>
             </div>

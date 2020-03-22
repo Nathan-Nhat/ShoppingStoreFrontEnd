@@ -7,7 +7,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles'
 import {submitEditUser} from '../../../../redux/Actions/ActionObjects/ActionsObjects';
 import {AppBar, Tab, Tabs} from '@material-ui/core'
 import Details from './UserDetails/Details';
-
+import OrderUserDetail from './UserDetails/OrderUserDetail'
 const UserDetails = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector(state => state.SingleUserReducer);
@@ -41,9 +41,7 @@ const UserDetails = () => {
             </AppBar>
             <Divider style = {{width : "100%"}}></Divider>
             { value === 0 ?<Details currentUser = {currentUser}/> :
-            <div>
-                123
-            </div>}
+            <OrderUserDetail username = {username}/>}
         </div>
     );
 };

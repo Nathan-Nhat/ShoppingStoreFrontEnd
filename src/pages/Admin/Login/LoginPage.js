@@ -42,7 +42,7 @@ function LoginPage(){
                 <Divider variant = "middle"/>
                 <form className = {classes.loginForm}>
                     <TextField required id = "username" label = "Username" className = {classes.element} onChange = {handleChange} name = "username"/>
-                    <TextField required id = "password" label = "Password" className = {classes.element} onChange = {handleChange} name = "password"/>
+                    <TextField type = "password" required id = "password" label = "Password" className = {classes.element} onChange = {handleChange} name = "password"/>
                     <Button onClick = {onClick} type = "submit" 
                         color = "primary" variant = "contained" className = {classes.button}>Login</Button>
                 </form>

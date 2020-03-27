@@ -10,6 +10,7 @@ import AddProductPage from '../ChildPage/ChildPagev2/AddProduct';
 import ProductsPage from '../ChildPage/ChildPagev2/ProductsPage'
 import ProductDetails from '../ChildPage/ChildPagev2/ProductDetails';
 import UserDetails from '../ChildPage/ChildPagev2/UserDetails'
+import OrderDetails from '../ChildPage/ChildPagev2/OrderDetails';
 const { width, height } = window;
 function MainPage() {
         let { path, url } = useRouteMatch();
@@ -39,6 +40,9 @@ function MainPage() {
                         </Route>
                         <Route path = "/users/:username">
                             <UserDetails/>
+                        </Route>
+                        <Route path = "/order/details/123">
+                            <OrderDetails />
                         </Route>
                     </Switch>
                 </div>

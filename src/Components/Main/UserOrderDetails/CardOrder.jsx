@@ -4,7 +4,9 @@ import ImageOrders from '../Dashboard/ImageOrders'
 import MessageRoundedIcon from '@material-ui/icons/MessageRounded';
 import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 import {convertToDate} from '../../../API/Tools'
+import {useHistory} from 'react-router-dom'
 export default function CardOrder({ state }) {
+    const history = useHistory();
     if (state.id === 0)
     return null
     else
@@ -28,8 +30,8 @@ export default function CardOrder({ state }) {
                         <IconButton>
                             <MessageRoundedIcon />
                         </IconButton>
-                        <IconButton>
-                            <OpenInNewRoundedIcon />
+                        <IconButton onClick = {()=>{history.push("/order/details/123")}}>
+                            <OpenInNewRoundedIcon/>
                         </IconButton>
                     </div>
                 </div>
